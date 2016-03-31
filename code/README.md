@@ -4,6 +4,7 @@
 ### Word2Vec models
 
 Found in `models` subfolder. Computing data for __8 threads__ in parallel. Downsampling set at .001. Context window set at 10.
+
 | Features | Min. words | Voc. size | Comp. time | Comp. speed |
 | --- | --- | --- | --- | --- |
 | 100 | 60 | 12 963 | 39.0s | 1 665 601 words/s |
