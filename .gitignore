@@ -45,3 +45,5 @@ Temporary Items
 # Project specific files
 code/test.py
 Console2
+*.pyc
+code/pickles
