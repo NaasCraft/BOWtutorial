@@ -2,7 +2,7 @@
 #
 # Last update : 31/03/2016
 # Author : Naascraft
-# Description : Kaggle tutorial on NLP with Word2Vec
+# Description : Kaggle tutorial on NLP with Word2Vec [PREPROCESS]
 
 ### Import module ###
 from bs4 import BeautifulSoup
@@ -10,7 +10,7 @@ import pandas as pd
 import sys
 import re
 import copy as cp
-import nltk #run nltk.download() locally to install the stopwords corpus
+import nltk #run nltk.download() locally to install the stopwords corpus and punkt tokenizers
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 from time import time
@@ -52,7 +52,7 @@ porter_stemmer_ = PorterStemmer()
 def pStem( words ): # Applies the Porter Stemming algorithm to the given list of tokens
 	return [porter_stemmer_.stem(w) for w in words]
 
-def fullPP( review, re_level, sw_drop, stem ):  #
+def fullPPtoW( review, re_level, sw_drop, stem, join_res=True ):
 	result = BeautifulSoup( review )
 	result = result.get_text().lower()
 	result = reTreatment( result, re_level )
@@ -63,16 +63,27 @@ def fullPP( review, re_level, sw_drop, stem ):  #
 	else:
 		if stem:
 			result = pStem( result.split() )
+	if join_res:
+		return ( " ".join(result) )
+	else:
+		return result
 	
-	return ( " ".join(result) )
-
-def run( data, verbose=False, re_level=0, sw_drop=True, stem=False ):
+tokenizer_ = nltk.data.load('tokenizers/punkt/english.pickle')
+def fullPPtoS( review, re_level, sw_drop, stem, tk=tokenizer_ ):
+	sentences = tk.tokenize(review.decode('utf-8').strip())
+	result = []
+	for s in sentences:
+		if len(s) > 0:
+			result += [fullPPtoW( s, re_level, sw_drop, stem, join_res=False ).split()]
+	
+	return result
+	
+def run( data, verbose=False, re_level=0, sw_drop=True, stem=False, asS=False ):
 	print( "\nRunning the data pre-processing with following parameters : \n" + \
 		"	Level of precision maintained after the regex simplification : " + str(re_level) + "\n" + \
-		"--- 0 : only alphabetical chars - 1 : numerical simplification - 2 : punctuation added - 3 : emoticons --- \n" + \
-		"\n" + \
 		"	Dropping of stop words : " + str(sw_drop) + "\n" + \
 		"	Porter Stemming algorithm : " + str(stem) + "\n" + \
+		"	Result stored as list of sentences for Word2Vec : " + str(asS) + "\n" + \
 		"\n" + \
 		"	_______ Please wait ... _______ \n \n" )
 	t = time()
@@ -80,7 +91,13 @@ def run( data, verbose=False, re_level=0, sw_drop=True, stem=False ):
 	size = data["review"].size
 	
 	for i in xrange( 0, size ): # Performs the full pre-processing of the given data accordingly to the parameters
-		pp_data.append( fullPP( data["review"][i], re_level, sw_drop, stem ) )
+		if i == 1:
+			print(pp_data)
+		if asS:
+			pp_data += fullPPtoS( data["review"][i], re_level, sw_drop, stem )
+		
+		else:
+			pp_data.append( fullPPtoW( data["review"][i], re_level, sw_drop, stem ) )
 	
 	t = time()-t
 	print( "Preprocessing completed. Total time : " + str(t) + " seconds. \n \n")

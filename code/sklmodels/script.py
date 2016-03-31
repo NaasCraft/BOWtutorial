@@ -2,7 +2,7 @@
 #
 # Last update : 31/03/2016
 # Author : Naascraft
-# Description : Kaggle tutorial on NLP with Word2Vec
+# Description : Kaggle tutorial on NLP with Word2Vec [SKLMODELS]
 
 ### Import module ###
 import pickle as pkl
@@ -17,6 +17,7 @@ from sklearn.ensemble import RandomForestClassifier
 ### Command Line Arguments ###
 _verb = "-v" in sys.argv
 _unpkl = "-u" in sys.argv
+_default = "-d" in sys.argv
 
 ### Path variables ###
 dataPath_ = "../../source/data/"
@@ -32,9 +33,10 @@ def buildRF( features, label, n_est=100, verbose=False ):
 	if verbose: print( "Completed in " + str( time()-t ) + " seconds.\n" )
 	return forest
 	
-def getBoWf( data=[], unpickle=False, verbose=False ):
-	print( "You required bag of words learning. Enter the following parameters : \n" )
-	in_max_features = int( raw_input( "Maximum features : " ) )
+def getBoWf( data=[], unpickle=False, verbose=False, m_f=5000, default=False ):
+	if not default:
+		print( "You required bag of words learning. Enter the following parameters : \n" )
+		m_f = int( raw_input( "Maximum features : " ) )
 	
 	if unpickle:
 		t = time()
@@ -48,7 +50,7 @@ def getBoWf( data=[], unpickle=False, verbose=False ):
 						tokenizer = None, \
 						preprocessor = None, \
 						stop_words = None, \
-						max_features = in_max_features) 
+						max_features = m_f) 
 	
 	bowFeatures = vectorizer.fit_transform(data)
 	bowFeatures = bowFeatures.toarray()
@@ -74,5 +76,5 @@ def getBoWf( data=[], unpickle=False, verbose=False ):
 		return bowFeatures
 	
 if __name__ == "__main__":
-	# Data unpickling
-	getBoWf( data, unpickle=_unpkl, verbose=_verb )
+	# Bag of word extraction as default
+	getBoWf( data, unpickle=_unpkl, verbose=_verb, default=_default )

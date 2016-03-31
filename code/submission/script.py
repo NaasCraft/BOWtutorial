@@ -2,7 +2,7 @@
 #
 # Last update : 31/03/2016
 # Author : Naascraft
-# Description : Kaggle tutorial on NLP with Word2Vec
+# Description : Kaggle tutorial on NLP with Word2Vec [SUBMISSION]
 
 ### Import module ###
 import pickle as pkl
@@ -20,6 +20,7 @@ _unpkl = "-u" in sys.argv
 
 ### Path variables ###
 dataPath_ = "../source/data/"
+outPath_ = "../output/"
 fileDir_ = os.path.dirname(os.path.realpath('__file__'))
 picklePath_ = os.path.join( fileDir_, "../pickles/" )
 
@@ -38,11 +39,14 @@ def run( model, modelID, verb=False, re_level_=0, sw_drop_=True, stem_=False ):
 	result = model.predict(testFeatures)
 
 	output = pd.DataFrame( data={"id":test["id"], "sentiment":result} )
-	output.to_csv( "submission"+modelID+".csv", index=False, quoting=3 )
+	output.to_csv( outPath_ + "submission" + modelID + ".csv", index=False, quoting=3 )
 	
 	return output
 
+'''
 if __name__ == "__main__":
 	# Data unpickling
-	dataPath_ = "../"+dataPath_
+	dataPath_ = "../" + dataPath_
+	outPath_ = "../" + outPath_
 	run( data, unpickle=_unpkl, verbose=_verb )
+'''
