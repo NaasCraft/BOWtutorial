@@ -47,3 +47,4 @@ code/test.py
 Console2
 *.pyc
 code/pickles
+code/models
