@@ -40,3 +40,6 @@ To run the Python code in this repo, you'll need the following packages :
 - [ ] [Part 3](https://www.kaggle.com/c/word2vec-nlp-tutorial/details/part-3-more-fun-with-word-vectors) : More Fun With Word Vectors
     - [ ] _\[extension\]_ : Hierarchical topic detection
     - [ ] _\[extension\]_ : Other clustering algorithms
+    
+- [ ] Extended commenting and help messages
+- [ ] Error handling
