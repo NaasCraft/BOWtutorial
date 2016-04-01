@@ -13,15 +13,12 @@ from time import time
 
 ### Command Line Arguments ###
 _verb = "-v" in sys.argv
-#_segments = ["-pp", "-skl", "-rf", "-s"]
-#_toRun = [ _segments[k] for k in range(len(segments_)) if _segments[k] in sys.argv ]
-#print(sys.argv, _segments, _toRun)
 _pickleData = "-p" in sys.argv
 _help = "-h" in sys.argv
 _default = "-d" in sys.argv
 _ppRun = "-pp" in sys.argv
 _sklRun = "-skl" in sys.argv
-_rfRun = "-rf" in sys.argv
+_fRun = "-f" in sys.argv
 _sRun = "-s" in sys.argv
 _noData = "-nd" in sys.argv
 
@@ -30,13 +27,16 @@ dataPath_ = "../source/data/"
 fileDir_ = os.path.dirname(os.path.realpath('__file__'))
 picklePath_ = os.path.join( fileDir_, "pickles/" )
 
+def debug( var, repr ):
+	print( "debug "+repr+" : "+str(var) )
+
 if __name__ == "__main__":
 	if _help:
 		print( "Help message yet to be written... TODO" )
 	else:
 		# Data reading
 		train = pd.read_csv( dataPath_+"labeledTrainData.tsv", header=0, delimiter="\t", quoting=3 )
-		in_asS = raw_input( "Do you want to use Word2Vec ? (Y/N) : ") == "Y"
+		in_asW2V = raw_input( "Do you want to use Word2Vec ? (Y/N) : ") == "Y"
 		
 		if _verb:
 			print( "Shape of labeled training dataset : \n" + str( train.shape ) + "\n" )
@@ -53,11 +53,11 @@ if __name__ == "__main__":
 			
 			ppfilename = "ppTrainData"
 			
-			if in_asS:
+			if in_asW2V:
 				ppfilename += "_sentences"
 				ul_train = pd.read_csv( dataPath_+"unlabeledTrainData.tsv", header=0, delimiter="\t", quoting=3 )
 				
-				ul_ppTrain = preprocess.script.run( ul_train, verbose=_verb, re_level=in_re_level, sw_drop=in_sw_drop, stem=in_stem, asS=in_asS )
+				ul_ppTrain, _empt_ = preprocess.script.run( ul_train, verbose=_verb, re_level=in_re_level, sw_drop=in_sw_drop, stem=in_stem, asW2V=in_asW2V )
 			
 				### Pickling of pre-processed data ###
 				if _pickleData:
@@ -66,11 +66,12 @@ if __name__ == "__main__":
 						print("Pickled pre-processed unlabeled data into 'ul_"+str(ppfilename)+".pkl' file." + \
 							"(Size : " + str( os.path.getsize("pickles/ul_"+str(ppfilename)+".pkl") / 1000.00 ) + " Kilobytes. \n\n")
 			
-			ppTrain = preprocess.script.run( train, verbose=_verb, re_level=in_re_level, sw_drop=in_sw_drop, stem=in_stem, asS=in_asS )
-		
+			ppTrain, ppTrainW = preprocess.script.run( train, verbose=_verb, re_level=in_re_level, sw_drop=in_sw_drop, stem=in_stem, asW2V=in_asW2V )
+			
 			### Pickling of pre-processed data ###
 			if _pickleData:
 				pkl.dump( ppTrain, open( "pickles/"+str(ppfilename)+".pkl","wb" ) )
+				pkl.dump( ppTrainW, open( "pickles/"+str(ppfilename)+"W.pkl","wb" ) )
 				if _verb: 
 					print("Pickled pre-processed labeled data into '"+str(ppfilename)+".pkl' file." + \
 						"(Size : " + str( os.path.getsize("pickles/"+str(ppfilename)+".pkl") / 1000.00 ) + " Kilobytes. \n\n")
@@ -80,37 +81,50 @@ if __name__ == "__main__":
 			
 			if (not _noData) and ("-pp" not in sys.argv):
 				ppfilename = "ppTrainData"
-				if in_asS:
+				if in_asW2V:
 					t = time()
 					ppfilename += "_sentences"
 					ul_ppTrain = pkl.load( open( picklePath_+"ul_"+str(ppfilename)+".pkl", "rb" ) )
+					ppTrainW = pkl.load( open( picklePath_+str(ppfilename)+"W.pkl", "rb" ) )
 				else:
 					t=time()
 				
 				ppTrain = pkl.load( open( picklePath_+str(ppfilename)+".pkl", "rb" ) )
-				print(len(ppTrain), ppTrain[:10])
-				if in_asS: ppTrain += ul_ppTrain
-				if _verb: print("\nPreprocessed data unpickling successfully completed in " + str( time()-t ) + " seconds.")
+				debug(ppTrain[0], "ppTrain[0]")
+				
+				if in_asW2V: ppTrain += ul_ppTrain
+				if _verb: print( "\nPreprocessed data unpickling successfully completed in " + str( time()-t ) + " seconds." )
+				
 			else:
 				ppTrain=[]
 			
-			while in_asS:
+			while in_asW2V:
 				import w2v.script
 				if _default:
 					w2vModel = w2v.script.run( sentences=ppTrain, default=True, verbose=_verb )
 				else:
-					print( "Info required for word2vec model training :")
-					in_load = raw_input( "Do you want to load an existing file ? (Y/N) : " ) == "Y"
-					in_loadname = raw_input( "... File name (if not loading, just hit enter) : " )
-					in_ready = raw_input( "Do you want to train this model again later ? (Y/N) : " ) == "N"
-					in_save = raw_input( "Do you want to save this model for future loading ? (Y/N) : " )
-					w2vModel = w2v.script.run( sentences=ppTrain, save=in_save, default=False, verbose=_verb, ready=in_ready, lf=in_load, loadname=in_loadname )
+					#print( "Info required for word2vec model training :")
+					in_load = True #raw_input( "Do you want to load an existing file ? (Y/N) : " ) == "Y"
+					in_loadname = "300features_40minwords" #raw_input( "... File name (if not loading, just hit enter) : " )
+					in_ready = True # raw_input( "Do you want to train this model again later ? (Y/N) : " ) == "N"
+					in_save = True # raw_input( "Do you want to save this model for future loading ? (Y/N) : " )
+					
+					w2vModel, n_f = w2v.script.run( sentences=ppTrain, save=in_save, default=False, verbose=_verb, ready=in_ready, lf=in_load, loadname=in_loadname )
 				
-				if raw_input("\nDo you want to train another model ? (Y/N) : ") == "N":
+				if True: #raw_input("\nDo you want to train another model ? (Y/N) : ") == "N":
+					in_mode = raw_input("Choose mode (avg, cluster) : ")
+					debug(ppTrainW[0], "ppTrainW[0]")
+					if in_mode == "cluster":
+						in_dump = raw_input("Load stored clusters map ? (Y/N) : ") == "N"
+						trainFeatures = w2v.script.loopFV( ppTrainW, w2vModel, mode="cluster", dump=in_dump )
+					else:
+						trainFeatures = w2v.script.loopFV( ppTrainW, w2vModel, mode="avg" )
 					break
 				
-			else:
-				bowFeatures = sklmodels.script.getBoWf( data=ppTrain, verbose=_verb, default=_default )
+			if not in_asW2V:
+				trainFeatures, m_f, vectorizer = sklmodels.script.getBoWf( data=ppTrain, verbose=_verb, default=_default )
+				in_mode = False
+				w2vModel = None
 			
 			''' Do not try to pickle this, with 200 features it already reaches 150MB !
 			### Pickling of bag of words extracted features ###
@@ -121,9 +135,17 @@ if __name__ == "__main__":
 						"(Size : " + str( os.path.getsize("pickles/bowFeatures.pkl") / 1000.00 ) + " Kilobytes. \n\n")
 			'''
 			
-			if "-rf" in sys.argv:
-				in_n_est = int( raw_input( "Enter number of estimators for the Random Forest classifier : " ) )
-				rf = sklmodels.script.buildRF( features=bowFeatures, label=train["sentiment"], n_est=in_n_est, verbose=_verb)
+			if "-f" in sys.argv:
+				toScale = raw_input( "Do you want to automatically scale features before fitting (Y/N) ? : ") == "Y"
+				if _verb: print( "Example train feature (before scaling) : \n" + str( trainFeatures[0] ) + "\n" )
+				if toScale:
+					scaler = sklmodels.script.dataScaler( trainFeatures )
+					trainFeatures = scaler.transform( trainFeatures )
+				else:
+					scaler = None
+					
+				in_modelMode = raw_input( "Enter classifier to use (rf, svm, knn) : " )
+				modelFit = sklmodels.script.buildModel( features=trainFeatures, label=train["sentiment"], mode=in_modelMode, verbose=_verb)
 				
 				''' Same size issues
 				### Pickling of trained random forest classifier ###
@@ -134,7 +156,12 @@ if __name__ == "__main__":
 							"(Size : " + str( os.path.getsize("pickles/bowRF.pkl") / 1000.00 ) + " Kilobytes. \n\n")
 				'''
 			
-		if "-s" in sys.argv:
-			import submission.script
-			
-			rfPred = submission.script.run( model=rf, modelID="RF", verb=True, re_level_=0, sw_drop_=True, stem_=True )
+				if "-s" in sys.argv:
+					import submission.script
+					
+					if in_asW2V:
+						in_modelMode += "_" + str(in_mode)
+						m_f=0
+						vectorizer=None
+						
+					pred = submission.script.run( model=modelFit, modelID=in_modelMode, verb=True, re_level_=0, sw_drop_=True, stem_=False, max_f=m_f, vect=vectorizer, mode=in_mode, wordModel=w2vModel, scale=toScale, dScaler=scaler )

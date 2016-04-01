@@ -15,6 +15,7 @@ from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 from time import time
 import os
+from main import debug
 
 ### Command Line Arguments ###
 _verb = "-v" in sys.argv
@@ -74,34 +75,34 @@ def fullPPtoS( review, re_level, sw_drop, stem, tk=tokenizer_ ):
 	result = []
 	for s in sentences:
 		if len(s) > 0:
-			result += [fullPPtoW( s, re_level, sw_drop, stem, join_res=False ).split()]
+			result += [fullPPtoW( s, re_level, sw_drop, stem, join_res=False )]
 	
 	return result
 	
-def run( data, verbose=False, re_level=0, sw_drop=True, stem=False, asS=False ):
+def run( data, verbose=False, re_level=0, sw_drop=True, stem=False, asW2V=False ):
 	print( "\nRunning the data pre-processing with following parameters : \n" + \
 		"	Level of precision maintained after the regex simplification : " + str(re_level) + "\n" + \
 		"	Dropping of stop words : " + str(sw_drop) + "\n" + \
 		"	Porter Stemming algorithm : " + str(stem) + "\n" + \
-		"	Result stored as list of sentences for Word2Vec : " + str(asS) + "\n" + \
+		"	Result stored as list of sentences for Word2Vec : " + str(asW2V) + "\n" + \
 		"\n" + \
 		"	_______ Please wait ... _______ \n \n" )
 	t = time()
-	pp_data = []
+	pp_data, pp_data_w = [], []
 	size = data["review"].size
 	
 	for i in xrange( 0, size ): # Performs the full pre-processing of the given data accordingly to the parameters
-		if i == 1:
-			print(pp_data)
-		if asS:
+		if asW2V:
 			pp_data += fullPPtoS( data["review"][i], re_level, sw_drop, stem )
 		
+			pp_data_w.append( fullPPtoW( data["review"][i], re_level, sw_drop, stem, join_res=False ) )
 		else:
-			pp_data.append( fullPPtoW( data["review"][i], re_level, sw_drop, stem ) )
+			pp_data_w.append( fullPPtoW( data["review"][i], re_level, sw_drop, stem, join_res=True ) )
 	
 	t = time()-t
-	print( "Preprocessing completed. Total time : " + str(t) + " seconds. \n \n")
+	print( "Preprocessing completed. Total time : " + str(t) + " seconds.\n\n" )
 	
+	'''
 	if verbose:
 		# BeautifulSoup preprocessing cleans off any HTML tag
 		expl11 = BeautifulSoup( data["review"][0] )
@@ -127,8 +128,12 @@ def run( data, verbose=False, re_level=0, sw_drop=True, stem=False, asS=False ):
 		# [Extension] Stemming with nltk, using the Porter stemming algorithm
 		expl51, expl52, expl53 = pStem(expl41), pStem(expl42), pStem(expl43)
 		print( "First 20 tokens after removing stopwords (only alphabetical) and Porter stemming : \n" + str( expl51[:20] ) + "\n" )
+	'''
 	
-	return pp_data
+	if pp_data:
+		return pp_data, pp_data_w
+	else:
+		return pp_data_w, []
 	
 if __name__ == "__main__":
 	# Data reading
