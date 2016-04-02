@@ -141,6 +141,8 @@ if __name__ == "__main__":
 			if "-f" in sys.argv:
 				toScale = raw_input( "Do you want to automatically scale features before fitting (Y/N) ? : ") == "Y"
 				if _verb: print( "Example train feature (before scaling) : \n" + str( trainFeatures[0] ) + "\n" )
+				if in_mode=="cluster":
+					debug(sum(trainFeatures[0]), "sum(trainFeatures[0])")
 				if toScale:
 					scaler = sklmodels.dataScaler( trainFeatures )
 					trainFeatures = scaler.transform( trainFeatures )
@@ -170,4 +172,4 @@ if __name__ == "__main__":
 					in_re_level = int( raw_input( "Regex process level (0-3) : " ) )
 					in_sw_drop = raw_input( "Do you want to keep stop words ? (Y/N) : " ) == "N"
 					in_stem = raw_input( "Do you want to apply Porter Stemming ? (Y/N) : ") == "Y"
-					pred = submission.run( model=modelFit, modelID=in_modelMode, verb=True, re_level_=in_re_level, sw_drop_=in_sw_drop, stem_=in_stem, max_f=m_f, vect=vectorizer, mode=in_mode, wordModel=w2vModel, scale=toScale, dScaler=scaler )
+					pred = submission.run( model=modelFit, modelID=in_modelMode, verb=True, re_level=in_re_level, sw_drop=in_sw_drop, stem=in_stem, max_f=m_f, vect=vectorizer, mode=in_mode, wordModel=w2vModel, scale=toScale, dScaler=scaler )

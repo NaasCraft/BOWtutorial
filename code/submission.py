@@ -26,7 +26,7 @@ dataPath_, picklePath_, outPath_ = main.dataPath_, main.picklePath_, main.outPat
 ### Debugging function ###
 debug = main.debug
 
-def run( model, modelID, verb=False, re_level_=0, sw_drop_=True, stem_=False, max_f=5000, vect=None, mode=False, wordModel=False, scale=False, dScaler=None ):
+def run( model, modelID, verb=False, re_level=0, sw_drop=True, stem=False, max_f=5000, vect=None, mode=False, wordModel=False, scale=False, dScaler=None ):
 	# Test data retrieval
 	test = pd.read_csv(dataPath_+"testData.tsv", header=0, delimiter="\t", quoting=3 )
 
@@ -34,7 +34,7 @@ def run( model, modelID, verb=False, re_level_=0, sw_drop_=True, stem_=False, ma
 	
 	if not mode:
 		import preprocess
-		ppTest, _empt_ = preprocess.run( test, verbose=verb, re_level=re_level_, sw_drop=sw_drop_, stem=stem_ )
+		ppTest, _empt_ = preprocess.run( test, verbose=verb, re_level=re_level, sw_drop=sw_drop, stem=stem )
 		debug(ppTest[0], "ppTest[0]")
 		
 		import sklmodels
@@ -47,12 +47,14 @@ def run( model, modelID, verb=False, re_level_=0, sw_drop_=True, stem_=False, ma
 		
 		clean_test_reviews = []
 		for review in test["review"]:
-			clean_test_reviews += [ preprocess.fullPPtoW( review, re_level=re_level_, \
-						sw_drop=sw_drop_, stem=stem_, join_res=False ) ]
+			clean_test_reviews += [ preprocess.fullPPtoW( review, re_level=re_level, \
+						sw_drop=sw_drop, stem=stem, join_res=False ) ]
 		
 		testFeatures = w2v.loopFV( clean_test_reviews, wordModel, mode )
 	
 	if verb: print( "Example test feature (before scaling) : \n" + str( testFeatures[0] ) + "\n" )
+	if mode=="cluster":
+					debug(sum(testFeatures[0]), "sum(testFeatures[0])")
 	
 	if scale:
 		testFeatures = dScaler.transform( testFeatures )

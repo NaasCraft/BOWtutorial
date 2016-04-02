@@ -45,10 +45,10 @@ def reTreatment( text, level=0 ):
 	# 	Capture 96% of the emoticon tokens occuring on Twitter
 	total_reS = [ emoticon_reS, punct_reS, num_reS, noAlphab_reS ]
 	
-	return reSub( text, total_reS[-level:] )
+	return reSub( text, total_reS[-(level+1):] )
 
 stops_ = set( stopwords.words("english") )
-def rmStopword( words ): # Removes stopwords from the given llist of tokens
+def rmStopword( words ): # Removes stopwords from the given list of tokens
 	return [w for w in words if not w in stops_]
 
 porter_stemmer_ = PorterStemmer()
