@@ -19,6 +19,7 @@ import main
 
 ### Command Line Arguments ###
 _verb = "-v" in sys.argv
+_default = "-d" in sys.argv
 
 ### Path variables ###
 dataPath_, picklePath_ = main.dataPath_, main.picklePath_

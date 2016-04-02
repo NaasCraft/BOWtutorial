@@ -18,6 +18,7 @@ import main
 ### Command Line Arguments ###
 _verb = "-v" in sys.argv
 _unpkl = "-u" in sys.argv
+_default = "-d" in sys.argv
 
 ### Path variables ###
 dataPath_, picklePath_, outPath_ = main.dataPath_, main.picklePath_, main.outPath_
