@@ -27,8 +27,8 @@ _noData = "-nd" in sys.argv
 fileDir_ = os.path.dirname(os.path.realpath('__file__'))
 dataPath_ = os.path.join( fileDir_, "../source/data/")
 picklePath_ = os.path.join( fileDir_, "pickles/" )
-outPath_ = os.path.join( fileDir_, "submission/")
-modelPath_ = os.path.join( fileDir_, "models/")
+outPath_ = os.path.join( fileDir_, "submission/tmp/")
+modelPath_ = os.path.join( fileDir_, "models/tmp/")
 
 def debug( var, repr ):
 	print( "debug "+repr+" : "+str(var) )
