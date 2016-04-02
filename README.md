@@ -14,6 +14,8 @@ Acquiring knowledge about *Natural Language Processing*, and more specifically t
 
 ## How ?
 
+For a description of the code, see [code/README.md](https://github.com/NaasCraft/BOWtutorial/blob/master/code/README.md).
+
 To run the Python code in this repo, you'll need the following packages :
 
 + [NumPy 1.9.2](http://www.numpy.org/)
@@ -30,7 +32,7 @@ To run the Python code in this repo, you'll need the following packages :
 - [x] [Part 1](https://www.kaggle.com/c/word2vec-nlp-tutorial/details/part-1-for-beginners-bag-of-words) : For Beginners - Bag of Words
     - [x] _\[extension\]_ : Explore regular expressions for preprocessing
     - [x] _\[extension\]_ : Implement stemming
-    - [ ] _\[extension\]_ : Build different classifiers (other than RF)
+    - [x] _\[extension\]_ : Build different classifiers (kNN and SVM)
     
 - [x] [Part 2](https://www.kaggle.com/c/word2vec-nlp-tutorial/details/part-2-word-vectors) : Word Vectors
     - [ ] _\[extension\]_ : Compare with [__GloVe__](http://nlp.stanford.edu/projects/glove/)
