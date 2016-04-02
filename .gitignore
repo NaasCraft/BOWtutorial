@@ -48,4 +48,4 @@ Console2
 *.pyc
 code/pickles
 code/models
-code/submissions
+code/submissions/*.csv
