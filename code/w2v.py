@@ -28,6 +28,8 @@ dataPath_, picklePath_, modelPath_ = main.dataPath_, main.picklePath_, main.mode
 debug = main.debug
 
 def makeFeatureVec( words, model, num_features ):
+	num_features = model.syn0.shape[1]
+	
 	# Pre-initialize an empty numpy array (for speed)
 	featureVec = np.zeros( (num_features,), dtype="float32" )
 	
@@ -43,7 +45,7 @@ def makeFeatureVec( words, model, num_features ):
 	return featureVec
 
 def showClusters ( map, n ):
-	# For the first 10 clusters
+	# For the first n clusters
 	for cluster in xrange(0,n):
 		# Print the cluster number  
 		print( "\nCluster" + str(cluster) )

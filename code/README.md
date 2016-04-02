@@ -229,18 +229,18 @@
         
 | type | name | description |
 | --- | --- | --- |
-|  | model |  |
-|  | modelID |  |
+| _classifier_ (from __sklearn__) | model | Trained model for prediction |
+| _string_ | modelID | Describes model and feature extraction mode for output |
 | _boolean_ | verb | Controls console outputs |
-|  | re_level |  |
-|  | sw_drop |  |
-|  | stem |  |
-|  | max_f |  |
-|  | vect |  |
-|  | mode |  |
-|  | wordModel |  |
-|  | scale |  |
-|  | dScaler |  |
+| _int_ | re_level | Level of Regex treatment (0-3) |
+| _boolean_ | sw_drop | Should drop stop words |
+| _boolean_ | stem | Should apply Porter Stemming |
+| _int_ | max_f | Number of maximum features for the Bag of Words |
+| _CountVectorizer_ (from __sklearn__) | vect | Saved vectorizer to transform test data |
+| _string_ | mode | Feature extraction mode (None for BoW, "avg" or "cluster") |
+| _W2VModel_ (from __gensim__) | wordModel | Trained word vector representation model |
+| _boolean_ | scale | Apply data scaling |
+| _StandardScaler_ (from __sklearn__) | dScaler | Fitted data scaler |
 
 
 ## `w2v.py`
@@ -262,9 +262,9 @@
         
 | type | name | description |
 | --- | --- | --- |
-|  | words |  |
-|  | model |  |
-|  | num_features |  |
+| _list_ of _string_ | words | List of words to extract features from |
+| _W2VModel_ (from __gensim__) | model | Trained word vector representation model |
+| _int_ | num_features | Size of word vector representations |
 
 + __showClusters__ ( map, n ) :
     + _does_ :
@@ -274,8 +274,8 @@
         
 | type | name | description |
 | --- | --- | --- |
-|  | map |  |
-|  | n |  |
+| _dict_ | map | Map of word cluster centroids |
+| _int_ | n | Number of first clusters to show |
 
 + __kMeansFit__ ( data, num_clusters ) :
     + _does_ :
@@ -285,8 +285,8 @@
         
 | type | name | description |
 | --- | --- | --- |
-|  | data |  |
-|  | num_clusters |  |
+| _ndarray_ (from __numpy__) | data | Vocabulary learned by the W2V model |
+| _int_ | num_clusters | Number of clusters to compute by KMeans() |
 
 + __createBagOfCentroids__( wordlist, word_centroid_map ) :
     + _does_ :
@@ -296,8 +296,8 @@
         
 | type | name | description |
 | --- | --- | --- |
-|  | wordlist |  |
-|  | word_centroid_map |  |
+| _list_ of _string_ | wordlist | List of words to extract features from |
+| _dict_ | word_centroid_map | Map of word cluster centroids |
 
 + __loopFV__( reviews, model, mode="avg", dump=False ) :
     + _does_ :
@@ -307,10 +307,10 @@
         
 | type | name | description |
 | --- | --- | --- |
-|  | reviews |  |
-|  | model |  |
-|  | mode |  |
-|  | dump |  |
+| _list_ of _list_ of _string_ | reviews | List of reviews as lists of words |
+| _W2VModel_ (from __gensim__) | model | Trained word vector representation model |
+| _string_ | mode | Feature extraction mode ("avg" or "cluster") |
+| _boolean_ | dump | Computes clusters and pickles the word cluster centroids map (else loads it) |
 
 + __load__( model_name, rd=True ) :
     + _does_ :
@@ -320,8 +320,8 @@
         
 | type | name | description |
 | --- | --- | --- |
-|  | model_name |  |
-|  | rd |  |
+| _string_ | model_name | Name of model to load |
+| _boolean_ | rd | Trims unneeded model memory but prevents model to be trained again |
 
 + __notMatch__( model, words, verbose ) :
     + _does_ :
@@ -331,8 +331,8 @@
         
 | type | name | description |
 | --- | --- | --- |
-|  | model |  |
-|  | words |  |
+| _W2VModel_ (from __gensim__) | model | Trained word vector representation model |
+| _list_ of _string_ | words | List of words to test |
 | _boolean_ | verbose | Controls console outputs |
 
 + __modelTesting__( model ) :
@@ -343,7 +343,7 @@
         
 | type | name | description |
 | --- | --- | --- |
-|  | model |  |
+| _W2VModel_ (from __gensim__) | model | Trained word vector representation model |
 
 + run( sentences, save=False, default=False, verbose=False, ready=True, lf=False, loadname="" ) :
     + _does_ :
@@ -353,10 +353,10 @@
         
 | type | name | description |
 | --- | --- | --- |
-|  | sentences |  |
-|  | save |  |
-|  | default |  |
+| _list_ of _list_ of _string_ | sentences | List of sentences as lists of words to train the model |
+| _boolean_ | save | Saves model once trained |
+| _boolean_ | default | Runs with default parameters (else asks user input) |
 | _boolean_ | verbose | Controls console outputs |
-|  | ready |  |
-|  | lf |  |
-|  | loadname |  |
+| _boolean_ | ready | Trims unneeded model memory but prevents model to be trained again |
+| _boolean_ | lf | Loads _loadname_ trained model |
+| _string_ | loadname | Name of model to load |
