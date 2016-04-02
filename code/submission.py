@@ -1,6 +1,6 @@
 # coding=latin-1
 #
-# Last update : 31/03/2016
+# Last update : 02/04/2016
 # Author : Naascraft
 # Description : Kaggle tutorial on NLP with Word2Vec [SUBMISSION]
 
@@ -13,17 +13,17 @@ from sklearn.feature_extraction.text import CountVectorizer
 import sys
 import os
 from sklearn.ensemble import RandomForestClassifier
-from main import debug
+import main
 
 ### Command Line Arguments ###
 _verb = "-v" in sys.argv
 _unpkl = "-u" in sys.argv
 
 ### Path variables ###
-dataPath_ = "../source/data/"
-outPath_ = "submission/"
-fileDir_ = os.path.dirname(os.path.realpath('__file__'))
-picklePath_ = os.path.join( fileDir_, "../pickles/" )
+dataPath_, picklePath_, outPath_ = main.dataPath_, main.picklePath_, main.outPath_
+
+### Debugging function ###
+debug = main.debug
 
 def run( model, modelID, verb=False, re_level_=0, sw_drop_=True, stem_=False, max_f=5000, vect=None, mode=False, wordModel=False, scale=False, dScaler=None ):
 	# Test data retrieval
@@ -32,24 +32,24 @@ def run( model, modelID, verb=False, re_level_=0, sw_drop_=True, stem_=False, ma
 	if verb: print ("\nTest dataset shape : " + str( test.shape ) )
 	
 	if not mode:
-		import preprocess.script
-		ppTest, _empt_ = preprocess.script.run( test, verbose=verb, re_level=re_level_, sw_drop=sw_drop_, stem=stem_ )
+		import preprocess
+		ppTest, _empt_ = preprocess.run( test, verbose=verb, re_level=re_level_, sw_drop=sw_drop_, stem=stem_ )
 		debug(ppTest[0], "ppTest[0]")
 		
-		import sklmodels.script
-		testFeatures, max_f, vect = sklmodels.script.getBoWf( ppTest, verbose=verb, vect=vect, m_f=max_f, default=True)
+		import sklmodels
+		testFeatures, max_f, vect = sklmodels.getBoWf( ppTest, verbose=verb, vect=vect, m_f=max_f, default=True)
 		
 	else:
-		import preprocess.script
-		import w2v.script
+		import preprocess
+		import w2v
 		print( "Creating "+str(mode)+"-style feature vecs for test reviews" )
 		
 		clean_test_reviews = []
 		for review in test["review"]:
-			clean_test_reviews += [ preprocess.script.fullPPtoW( review, re_level=re_level_, \
+			clean_test_reviews += [ preprocess.fullPPtoW( review, re_level=re_level_, \
 						sw_drop=sw_drop_, stem=stem_, join_res=False ) ]
 		
-		testFeatures = w2v.script.loopFV( clean_test_reviews, wordModel, mode )
+		testFeatures = w2v.loopFV( clean_test_reviews, wordModel, mode )
 	
 	if verb: print( "Example test feature (before scaling) : \n" + str( testFeatures[0] ) + "\n" )
 	

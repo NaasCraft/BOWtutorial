@@ -1,6 +1,6 @@
 # coding=latin-1
 #
-# Last update : 31/03/2016
+# Last update : 02/04/2016
 # Author : Naascraft
 # Description : Kaggle tutorial on NLP with Word2Vec [WORD2VEC]
 
@@ -13,7 +13,7 @@ import sys
 import os
 from gensim.models import word2vec
 from sklearn.cluster import KMeans
-from main import debug
+import main
 
 ### Command Line Arguments ###
 _verb = "-v" in sys.argv
@@ -22,10 +22,10 @@ _save= "-s" in sys.argv
 _default = "-d" in sys.argv
 
 ### Path variables ###
-dataPath_ = "../../source/data/"
-fileDir_ = os.path.dirname( os.path.realpath('__file__') )
-picklePath_ = os.path.join( fileDir_, "../pickles/" )
-modelPath_ = "models/"
+dataPath_, picklePath_, modelPath_ = main.dataPath_, main.picklePath_, main.modelPath_
+
+### Debugging function ###
+debug = main.debug
 
 def makeFeatureVec( words, model, num_features ):
 	# Pre-initialize an empty numpy array (for speed)
@@ -77,8 +77,7 @@ def createBagOfCentroids( wordlist, word_centroid_map ):
 		if word in word_centroid_map:
 			index = word_centroid_map[word]
 			bag_of_centroids[index] += 1
-	
-	#debug(bag_of_centroids, "bag_of_centroids")
+			
 	# Return the "bag of centroids"
 	return bag_of_centroids
 
@@ -108,17 +107,14 @@ def loopFV( reviews, model, mode="avg", dump=False ):
 		else:
 			word_centroid_map = pkl.load(open( "pickles/tmp/centroid_map.pkl","rb" ))
 			
-		debug(word_centroid_map, "word_centroid_map")
 		num_features = max( word_centroid_map.values() ) + 1
-		debug(num_features, "num_features")
+		debug(num_features, "num of centroids")
 		
 	# Preallocate a 2D numpy array, for speed
 	reviewFeatureVecs = np.zeros( (len(reviews),num_features), dtype="float32" )
 	
 	for review in reviews:
 		# Print a status message every 1000th review
-		if counter == 0.:
-			debug(review, "first review")
 		if counter%1000. == 0.:
 			print( "Review " + str(counter) + " of " + str( len(reviews) ) )
 		

@@ -1,6 +1,6 @@
 # coding=latin-1
 #
-# Last update : 31/03/2016
+# Last update : 02/04/2016
 # Author : Naascraft
 # Description : Kaggle tutorial on NLP with Word2Vec [MAIN]
 
@@ -16,16 +16,19 @@ _verb = "-v" in sys.argv
 _pickleData = "-p" in sys.argv
 _help = "-h" in sys.argv
 _default = "-d" in sys.argv
+_noData = "-nd" in sys.argv
 _ppRun = "-pp" in sys.argv
-_sklRun = "-skl" in sys.argv
-_fRun = "-f" in sys.argv
+_feRun = "-fe" in sys.argv
+_mRun = "-m" in sys.argv
 _sRun = "-s" in sys.argv
 _noData = "-nd" in sys.argv
 
 ### Path variables ###
-dataPath_ = "../source/data/"
 fileDir_ = os.path.dirname(os.path.realpath('__file__'))
+dataPath_ = os.path.join( fileDir_, "../source/data/")
 picklePath_ = os.path.join( fileDir_, "pickles/" )
+outPath_ = os.path.join( fileDir_, "submission/")
+modelPath_ = os.path.join( fileDir_, "models/")
 
 def debug( var, repr ):
 	print( "debug "+repr+" : "+str(var) )
@@ -49,7 +52,7 @@ if __name__ == "__main__":
 			in_sw_drop = raw_input( "Do you want to keep stop words ? (Y/N) : " ) == "N"
 			in_stem = raw_input( "Do you want to apply Porter Stemming ? (Y/N) : ") == "Y"
 			
-			import preprocess.script
+			import preprocess
 			
 			ppfilename = "ppTrainData"
 			
@@ -57,7 +60,7 @@ if __name__ == "__main__":
 				ppfilename += "_sentences"
 				ul_train = pd.read_csv( dataPath_+"unlabeledTrainData.tsv", header=0, delimiter="\t", quoting=3 )
 				
-				ul_ppTrain, _empt_ = preprocess.script.run( ul_train, verbose=_verb, re_level=in_re_level, sw_drop=in_sw_drop, stem=in_stem, asW2V=in_asW2V )
+				ul_ppTrain, _empt_ = preprocess.run( ul_train, verbose=_verb, re_level=in_re_level, sw_drop=in_sw_drop, stem=in_stem, asW2V=in_asW2V )
 			
 				### Pickling of pre-processed data ###
 				if _pickleData:
@@ -66,7 +69,7 @@ if __name__ == "__main__":
 						print("Pickled pre-processed unlabeled data into 'ul_"+str(ppfilename)+".pkl' file." + \
 							"(Size : " + str( os.path.getsize("pickles/ul_"+str(ppfilename)+".pkl") / 1000.00 ) + " Kilobytes. \n\n")
 			
-			ppTrain, ppTrainW = preprocess.script.run( train, verbose=_verb, re_level=in_re_level, sw_drop=in_sw_drop, stem=in_stem, asW2V=in_asW2V )
+			ppTrain, ppTrainW = preprocess.run( train, verbose=_verb, re_level=in_re_level, sw_drop=in_sw_drop, stem=in_stem, asW2V=in_asW2V )
 			
 			### Pickling of pre-processed data ###
 			if _pickleData:
@@ -77,7 +80,7 @@ if __name__ == "__main__":
 						"(Size : " + str( os.path.getsize("pickles/"+str(ppfilename)+".pkl") / 1000.00 ) + " Kilobytes. \n\n")
 							
 		if "-skl" in sys.argv:
-			import sklmodels.script
+			import sklmodels
 			
 			if (not _noData) and ("-pp" not in sys.argv):
 				ppfilename = "ppTrainData"
@@ -99,9 +102,9 @@ if __name__ == "__main__":
 				ppTrain=[]
 			
 			while in_asW2V:
-				import w2v.script
+				import w2v
 				if _default:
-					w2vModel = w2v.script.run( sentences=ppTrain, default=True, verbose=_verb )
+					w2vModel = w2v.run( sentences=ppTrain, default=True, verbose=_verb )
 				else:
 					#print( "Info required for word2vec model training :")
 					in_load = True #raw_input( "Do you want to load an existing file ? (Y/N) : " ) == "Y"
@@ -109,20 +112,20 @@ if __name__ == "__main__":
 					in_ready = True # raw_input( "Do you want to train this model again later ? (Y/N) : " ) == "N"
 					in_save = True # raw_input( "Do you want to save this model for future loading ? (Y/N) : " )
 					
-					w2vModel, n_f = w2v.script.run( sentences=ppTrain, save=in_save, default=False, verbose=_verb, ready=in_ready, lf=in_load, loadname=in_loadname )
+					w2vModel, n_f = w2v.run( sentences=ppTrain, save=in_save, default=False, verbose=_verb, ready=in_ready, lf=in_load, loadname=in_loadname )
 				
 				if True: #raw_input("\nDo you want to train another model ? (Y/N) : ") == "N":
 					in_mode = raw_input("Choose mode (avg, cluster) : ")
 					debug(ppTrainW[0], "ppTrainW[0]")
 					if in_mode == "cluster":
 						in_dump = raw_input("Load stored clusters map ? (Y/N) : ") == "N"
-						trainFeatures = w2v.script.loopFV( ppTrainW, w2vModel, mode="cluster", dump=in_dump )
+						trainFeatures = w2v.loopFV( ppTrainW, w2vModel, mode="cluster", dump=in_dump )
 					else:
-						trainFeatures = w2v.script.loopFV( ppTrainW, w2vModel, mode="avg" )
+						trainFeatures = w2v.loopFV( ppTrainW, w2vModel, mode="avg" )
 					break
 				
 			if not in_asW2V:
-				trainFeatures, m_f, vectorizer = sklmodels.script.getBoWf( data=ppTrain, verbose=_verb, default=_default )
+				trainFeatures, m_f, vectorizer = sklmodels.getBoWf( data=ppTrain, verbose=_verb, default=_default )
 				in_mode = False
 				w2vModel = None
 			
@@ -139,13 +142,13 @@ if __name__ == "__main__":
 				toScale = raw_input( "Do you want to automatically scale features before fitting (Y/N) ? : ") == "Y"
 				if _verb: print( "Example train feature (before scaling) : \n" + str( trainFeatures[0] ) + "\n" )
 				if toScale:
-					scaler = sklmodels.script.dataScaler( trainFeatures )
+					scaler = sklmodels.dataScaler( trainFeatures )
 					trainFeatures = scaler.transform( trainFeatures )
 				else:
 					scaler = None
 					
 				in_modelMode = raw_input( "Enter classifier to use (rf, svm, knn) : " )
-				modelFit = sklmodels.script.buildModel( features=trainFeatures, label=train["sentiment"], mode=in_modelMode, verbose=_verb)
+				modelFit = sklmodels.buildModel( features=trainFeatures, label=train["sentiment"], mode=in_modelMode, verbose=_verb)
 				
 				''' Same size issues
 				### Pickling of trained random forest classifier ###
@@ -157,11 +160,14 @@ if __name__ == "__main__":
 				'''
 			
 				if "-s" in sys.argv:
-					import submission.script
+					import submission
 					
 					if in_asW2V:
 						in_modelMode += "_" + str(in_mode)
 						m_f=0
 						vectorizer=None
 						
-					pred = submission.script.run( model=modelFit, modelID=in_modelMode, verb=True, re_level_=0, sw_drop_=True, stem_=False, max_f=m_f, vect=vectorizer, mode=in_mode, wordModel=w2vModel, scale=toScale, dScaler=scaler )
+					in_re_level = int( raw_input( "Regex process level (0-3) : " ) )
+					in_sw_drop = raw_input( "Do you want to keep stop words ? (Y/N) : " ) == "N"
+					in_stem = raw_input( "Do you want to apply Porter Stemming ? (Y/N) : ") == "Y"
+					pred = submission.run( model=modelFit, modelID=in_modelMode, verb=True, re_level_=in_re_level, sw_drop_=in_sw_drop, stem_=in_stem, max_f=m_f, vect=vectorizer, mode=in_mode, wordModel=w2vModel, scale=toScale, dScaler=scaler )

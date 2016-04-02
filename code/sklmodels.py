@@ -1,6 +1,6 @@
 # coding=latin-1
 #
-# Last update : 31/03/2016
+# Last update : 02/04/2016
 # Author : Naascraft
 # Description : Kaggle tutorial on NLP with Word2Vec [SKLMODELS]
 
@@ -12,7 +12,7 @@ import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
 import sys
 import os
-from main import debug
+import main
 
 ### Command Line Arguments ###
 _verb = "-v" in sys.argv
@@ -20,9 +20,10 @@ _unpkl = "-u" in sys.argv
 _default = "-d" in sys.argv
 
 ### Path variables ###
-dataPath_ = "../../source/data/"
-fileDir_ = os.path.dirname(os.path.realpath('__file__'))
-picklePath_ = os.path.join( fileDir_, "../pickles/" )
+dataPath_, picklePath_ = main.dataPath_, main.picklePath_
+
+### Debugging function ###
+debug = main.debug
 
 def dataScaler( train ):
 	from sklearn.preprocessing import StandardScaler
