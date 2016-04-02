@@ -143,7 +143,7 @@
         
 | type | name | description |
 | --- | --- | --- |
-|  | train |  |
+| _list_ | train | List of train features to fit the scaler |
 
 + __buildRF__( features, label, n_est=100, verbose=False ) :
     + _does_ :
@@ -153,9 +153,9 @@
         
 | type | name | description |
 | --- | --- | --- |
-|  | features |  |
-|  | label |  |
-|  | n_est |  |
+| _list_ | features | List of train features to fit the model |
+| _list_ of _int_ | label | List of associated labels |
+| _int_ | n_est | Number of estimators for the RF |
 | _boolean_ | verbose | Controls console outputs |
 
 + __buildSVM__( features, label, verbose=False ) :
@@ -166,9 +166,9 @@
         
 | type | name | description |
 | --- | --- | --- |
-|  | features |  |
-|  | label |  |
-|  | verbose |  |
+| _list_ | features | List of train features to fit the model |
+| _list_ of _int_ | label | List of associated labels |
+| _boolean_ | verbose | Controls console outputs |
 
 + __buildKNN__( features, label, verbose=False ) :
     + _does_ :
@@ -178,9 +178,9 @@
         
 | type | name | description |
 | --- | --- | --- |
-|  | features |  |
-|  | label |  |
-|  | verbose |  |
+| _list_ | features | List of train features to fit the model |
+| _list_ of _int_ | label | List of associated labels |
+| _boolean_ | verbose | Controls console outputs |
 
 + __buildModel__( features, label, mode="rf", verbose=False ) :
     + _does_ :
@@ -190,10 +190,10 @@
         
 | type | name | description |
 | --- | --- | --- |
-|  | features |  |
-|  | label |  |
-|  | mode |  |
-|  | verbose |  |
+| _list_ | features | List of train features to fit the model |
+| _list_ of _int_ | label | List of associated labels |
+| _string_ | mode | Defines which model to train |
+| _boolean_ | verbose | Controls console outputs |
 
 + __getBoWf__( data=[], unpickle=False, verbose=False, m_f=5000, default=False, vect=False ) :
     + _does_ :
@@ -203,12 +203,12 @@
         
 | type | name | description |
 | --- | --- | --- |
-|  | data |  |
-|  | unpickle |  |
-|  | verbose |  |
-|  | m_f |  |
-|  | default |  |
-|  | vect |  |
+| _list_ of _string_ | data | List of pre-processed reviews |
+| _boolean_ | unpickle | Loads train data (else uses given data) |
+| _boolean_ | verbose | Controls console outputs |
+| _int_ | m_f | Number of maximum features for the Bag of Words |
+| _boolean_ | default | Runs with default parameters (else asks user input) |
+| _CountVectorizer_ (from __sklearn__) | vect | Saved vectorizer to transform test data |
 
 
 ## `submission.py`
@@ -231,7 +231,7 @@
 | --- | --- | --- |
 |  | model |  |
 |  | modelID |  |
-|  | verb |  |
+| _boolean_ | verb | Controls console outputs |
 |  | re_level |  |
 |  | sw_drop |  |
 |  | stem |  |
@@ -333,7 +333,7 @@
 | --- | --- | --- |
 |  | model |  |
 |  | words |  |
-|  | verbose |  |
+| _boolean_ | verbose | Controls console outputs |
 
 + __modelTesting__( model ) :
     + _does_ :
@@ -356,7 +356,7 @@
 |  | sentences |  |
 |  | save |  |
 |  | default |  |
-|  | verbose |  |
+| _boolean_ | verbose | Controls console outputs |
 |  | ready |  |
 |  | lf |  |
 |  | loadname |  |
