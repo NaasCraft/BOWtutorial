@@ -1,80 +1,24 @@
-# Full code description
+# Extensions and code modifications
 
-## `main.py`
+### Project TO-DO list
 
-#### Command Line Arguments
+- [x] [Part 1](https://www.kaggle.com/c/word2vec-nlp-tutorial/details/part-1-for-beginners-bag-of-words) : For Beginners - Bag of Words
+    - [x] _\[extension\]_ : Explore regular expressions for preprocessing
+    - [x] _\[extension\]_ : Implement stemming
+    - [x] _\[extension\]_ : Build different classifiers (kNN and SVM)
+    
+- [x] [Part 2](https://www.kaggle.com/c/word2vec-nlp-tutorial/details/part-2-word-vectors) : Word Vectors
+    - [ ] _\[extension\]_ : Compare with [__GloVe__](http://nlp.stanford.edu/projects/glove/)
+    - [ ] _\[extension\]_ : Try model learning with external corpus (e.g. [Latest Wikipedia dump](http://dumps.wikimedia.org/enwiki/latest/enwiki-latest-pages-articles.xml.bz2))
+    - [ ] _\[extension\]_ : Phrases extraction
+    
+- [ ] [Part 3](https://www.kaggle.com/c/word2vec-nlp-tutorial/details/part-3-more-fun-with-word-vectors) : More Fun With Word Vectors
+    - [ ] _\[extension\]_ : Hierarchical topic detection
+    - [ ] _\[extension\]_ : Other clustering algorithms
+  
+### Code modifications
 
-+ __-v__ : "Verbose", controls console outputs.
-+ __-p__ : "Pickling", controls whether to save the data or not, into `pickles/` folder.
-+ __-h__ : "Help", if present, simply show a description of command line arguments.
-+ __-d__ : "Default", runs with default parameters.
-+ __-nd__ : "No Data", runs without loading data. Used for language model testing.
-+ __-pp__ : "Pre-processing", runs the data pre-processing.
-+ __-fe__ : "Feature extraction", runs the feature extraction (according to user inputs).
-+ __-m__ : "Modelling", runs the model training (according to user inputs).
-+ __-s__ : "Submit", runs the predicting and submission writing.
-
-
-#### Functions
-
-+ __debug__( var, repr ) :
-
-
-
-## `preprocess.py`
-
-#### Command Line Arguments
-
-+ __-v__ : "Verbose", controls console outputs.
-+ __-p__ : "Pickling", controls whether to save the data or not, into `pickles/` folder.
-+ __-h__ : "Help", if present, simply show a description of command line arguments.
-+ __-d__ : "Default", runs with default parameters.
-+ __-nd__ : "No Data", runs without loading data. Used for language model testing.
-+ __-pp__ : "Pre-processing", runs the data pre-processing.
-+ __-fe__ : "Feature extraction", runs the feature extraction (according to user inputs).
-+ __-m__ : "Modelling", runs the model training (according to user inputs).
-+ __-s__ : "Submit", runs the predicting and submission writing.
-
-#### Functions
-
-+ __debug__( var, repr ) :
-
-
-
-## `sklmodels.py`
-
-#### Command Line Arguments
-
-+ __-v__ :
-
-
-#### Functions
-
-+ __debug__( var, repr ) :
-
-
-
-## `submission.py`
-
-#### Command Line Arguments
-
-+ __-v__ :
-
-
-#### Functions
-
-+ __debug__( var, repr ) :
-
-
-
-## `w2v.py`
-
-#### Command Line Arguments
-
-+ __-v__ :
-
-
-#### Functions
-
-+ __debug__( var, repr ) :
-
+- [ ] Extended commenting and help messages
+- [ ] Error handling
+- [ ] Simplification with classes definition
+- [ ] Variable/function renaming

@@ -47,5 +47,6 @@ code/test.py
 Console2
 *.pyc
 code/pickles
-code/models
-code/submissions/*.csv
+code/models/*
+!code/models/README.md
+code/submission/*.csv

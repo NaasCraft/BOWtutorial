@@ -1,18 +1,80 @@
-# `code` folder
+# Full code description
+
+## `main.py`
+
+#### Command Line Arguments
+
++ __-v__ : "Verbose", controls console outputs.
++ __-p__ : "Pickling", controls whether to save the data or not, into `pickles/` folder.
++ __-h__ : "Help", if present, simply show a description of command line arguments.
++ __-d__ : "Default", runs with default parameters.
++ __-nd__ : "No Data", runs without loading data. Used for language model testing.
++ __-pp__ : "Pre-processing", runs the data pre-processing.
++ __-fe__ : "Feature extraction", runs the feature extraction (according to user inputs).
++ __-m__ : "Modelling", runs the model training (according to user inputs).
++ __-s__ : "Submit", runs the predicting and submission writing.
 
 
-### Word2Vec models
+#### Functions
 
-Found in `models` subfolder. Computing data for __8 threads__ in parallel. Downsampling set at .001. Context window set at 10.
++ __debug__( var, repr ) :
 
-| Features | Min. words | Voc. size | Comp. time | Comp. speed |
-| --- | --- | --- | --- | --- |
-| 100 | 60 | 12 963 | 39.0s | 1 665 601 words/s |
-| 300 | 60 | 12 963 | 58.7s | 1 107 160 words/s |
-| 1000 | 60 | 12 96 | 150.8s | 430 721 words/s |
-| 100 | 40 | 16 493 | 45.9s | 1 436 928 words/s |
-| 300 | 40 | 16 493 | 61.8s | 1 66 090 words/s |
-| 1000 | 40 | 16 493 | 157.2s | 419 240 words/s |
-| 100 | 20 | 24 159 | 46.1s | 1 456 663 words/s |
-| 300 | 20 | 24 15 | 67.3s | 997 401 words/s |
-| 1000 | 20 | 24 159 | 160.3s | 418 596 words/s |
+
+
+## `preprocess.py`
+
+#### Command Line Arguments
+
++ __-v__ : "Verbose", controls console outputs.
++ __-p__ : "Pickling", controls whether to save the data or not, into `pickles/` folder.
++ __-h__ : "Help", if present, simply show a description of command line arguments.
++ __-d__ : "Default", runs with default parameters.
++ __-nd__ : "No Data", runs without loading data. Used for language model testing.
++ __-pp__ : "Pre-processing", runs the data pre-processing.
++ __-fe__ : "Feature extraction", runs the feature extraction (according to user inputs).
++ __-m__ : "Modelling", runs the model training (according to user inputs).
++ __-s__ : "Submit", runs the predicting and submission writing.
+
+#### Functions
+
++ __debug__( var, repr ) :
+
+
+
+## `sklmodels.py`
+
+#### Command Line Arguments
+
++ __-v__ :
+
+
+#### Functions
+
++ __debug__( var, repr ) :
+
+
+
+## `submission.py`
+
+#### Command Line Arguments
+
++ __-v__ :
+
+
+#### Functions
+
++ __debug__( var, repr ) :
+
+
+
+## `w2v.py`
+
+#### Command Line Arguments
+
++ __-v__ :
+
+
+#### Functions
+
++ __debug__( var, repr ) :
+
