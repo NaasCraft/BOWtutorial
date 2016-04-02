@@ -71,9 +71,9 @@ def buildSVM( features, label, verbose=False ):
 def buildKNN( features, label, verbose=False ):
 	from sklearn.neighbors import KNeighborsClassifier
 	
-	if verbose: print( "Training the K-NN model with k=10...\n" )
+	if verbose: print( "Training the K-NN model with k=3...\n" )
 	t = time()
-	clf = KNeighborsClassifier(n_neighbors=10) 
+	clf = KNeighborsClassifier(n_neighbors=3) 
 	clf = clf.fit( features, label )
 	
 	if verbose: print( "Completed in " + str( time()-t ) + " seconds.\n" )
