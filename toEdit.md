@@ -18,7 +18,12 @@
   
 ### Code modifications
 
-- [x] Extended commenting and help messages
-- [ ] Error handling
-- [ ] Simplification with classes definition
-- [ ] Variable/function renaming
+- [ ] Code problems
+    - [ ] Extended in-code commenting
+    - [ ] Error handling
+    - [ ] Variable/function renaming
+    
+- [ ]Code structure
+    - [ ] Simplification with classes definition (esp. for data)
+    - [ ] Split (feature extraction, model fitting and submit) part
+    - [ ] Split `submission.run` into multiple functions
