@@ -377,7 +377,7 @@
 | --- | --- | --- |
 | _W2VModel_ (from __gensim__) | model | Trained word vector representation model |
 
-+ run( sentences, save=False, default=False, verbose=False, ready=True, lf=False, loadname="" ) :
++ __run__( sentences, save=False, default=False, verbose=False, ready=True, lf=False, loadname="" ) :
     + _does_ : Performs a Word2Vec model training with given "sentences" (or loads one)
     + _returns_ : Trained model (as _Word2Vec_), word vectors size (as _int_)
     + _called by_ : `python main.py -skl`
