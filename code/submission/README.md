@@ -33,9 +33,9 @@ For this tutorial, I have implemented :
 
 |  | Bag of Words | Averaged Word Vectors | Bag of Centroids |
 | :---: | ---: | ---: | ---: |
-| Regex3, noSW, noStem | 0.84416 | 0.82960 | _0.84688_ |
+| Regex3, noSW, noStem | 0.84416 | 0.82960 | __0.84688__ |
 | Regex3, noSW, Stem | 0.84348 | 0.78080 |  |
-| Regex0, noSW, noStem | _0.84628_ | _0.83388_ | 0.84304 |
+| Regex0, noSW, noStem | __0.84628__ | __0.83388__ | 0.84304 |
 | Regex0, SW, noStem |  |  | 0.58096 |
 
 ### K Nearest Neighbors
