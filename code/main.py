@@ -21,7 +21,6 @@ _ppRun = "-pp" in sys.argv
 _feRun = "-fe" in sys.argv
 _mRun = "-m" in sys.argv
 _sRun = "-s" in sys.argv
-_noData = "-nd" in sys.argv
 
 ### Path variables ###
 fileDir_ = os.path.dirname(os.path.realpath('__file__'))
@@ -46,7 +45,7 @@ if __name__ == "__main__":
 			#print( "Example review (raw) : \n" + str( train["review"][0] ) + "\n" )
 	
 		# Data processing
-		if "-pp" in sys.argv:
+		if _ppRun:
 			print( "You required data pre processing. Enter the following parameters : \n" )
 			in_re_level = int( raw_input( "Regex process level (0-3) : " ) )
 			in_sw_drop = raw_input( "Do you want to keep stop words ? (Y/N) : " ) == "N"
@@ -79,10 +78,10 @@ if __name__ == "__main__":
 					print("Pickled pre-processed labeled data into '"+str(ppfilename)+".pkl' file." + \
 						"(Size : " + str( os.path.getsize("pickles/"+str(ppfilename)+".pkl") / 1000.00 ) + " Kilobytes. \n\n")
 							
-		if "-skl" in sys.argv:
+		if _feRun:
 			import sklmodels
 			
-			if (not _noData) and ("-pp" not in sys.argv):
+			if not (_noData or _ppRun):
 				ppfilename = "ppTrainData"
 				if in_asW2V:
 					t = time()
@@ -93,12 +92,9 @@ if __name__ == "__main__":
 					t=time()
 				
 				ppTrain = pkl.load( open( picklePath_+str(ppfilename)+".pkl", "rb" ) )
-				debug(ppTrain[0], "ppTrain[0]")
 				
 				if in_asW2V: ppTrain += ul_ppTrain
 				if _verb: print( "\nPreprocessed data unpickling successfully completed in " + str( time()-t ) + " seconds." )
-			
-			debug(ppTrain[0], "ppTrain[0]")
 			
 			while in_asW2V:
 				import w2v
@@ -115,7 +111,7 @@ if __name__ == "__main__":
 				
 				if True: #raw_input("\nDo you want to train another model ? (Y/N) : ") == "N":
 					in_mode = raw_input("Choose mode (avg, cluster) : ")
-					debug(ppTrainW[0], "ppTrainW[0]")
+					
 					if in_mode == "cluster":
 						in_dump = raw_input("Load stored clusters map ? (Y/N) : ") == "N"
 						trainFeatures = w2v.loopFV( ppTrainW, w2vModel, mode="cluster", dump=in_dump )
@@ -137,11 +133,10 @@ if __name__ == "__main__":
 						"(Size : " + str( os.path.getsize("pickles/bowFeatures.pkl") / 1000.00 ) + " Kilobytes. \n\n")
 			'''
 			
-			if "-f" in sys.argv:
+			if _mRun:
 				toScale = raw_input( "Do you want to automatically scale features before fitting (Y/N) ? : ") == "Y"
 				if _verb: print( "Example train feature (before scaling) : \n" + str( trainFeatures[0] ) + "\n" )
-				if in_mode=="cluster":
-					debug(sum(trainFeatures[0]), "sum(trainFeatures[0])")
+				
 				if toScale:
 					scaler = sklmodels.dataScaler( trainFeatures )
 					trainFeatures = scaler.transform( trainFeatures )
@@ -160,7 +155,7 @@ if __name__ == "__main__":
 							"(Size : " + str( os.path.getsize("pickles/bowRF.pkl") / 1000.00 ) + " Kilobytes. \n\n")
 				'''
 			
-				if "-s" in sys.argv:
+				if _sRun:
 					import submission
 					
 					if in_asW2V:

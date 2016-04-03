@@ -34,7 +34,6 @@ def run( model, modelID, verb=False, re_level=0, sw_drop=True, stem=False, max_f
 	if not mode:
 		import preprocess
 		ppTest, _empt_ = preprocess.run( test, verbose=verb, re_level=re_level, sw_drop=sw_drop, stem=stem )
-		debug(ppTest[0], "ppTest[0]")
 		
 		import sklmodels
 		testFeatures, max_f, vect = sklmodels.getBoWf( ppTest, verbose=verb, vect=vect, m_f=max_f, default=True)
@@ -61,6 +60,8 @@ def run( model, modelID, verb=False, re_level=0, sw_drop=True, stem=False, max_f
 
 	output = pd.DataFrame( data={"id":test["id"], "sentiment":result} )
 	output.to_csv( outPath_ + "submission" + modelID + ".csv", index=False, quoting=3 )
+	
+	if verb: print( "Submission file saved as 'submission" + modelID + ".csv.")
 	
 	return output
 
