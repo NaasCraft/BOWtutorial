@@ -70,7 +70,9 @@ Here's an example :
 + __Part 4 : Submitting the results__
     + The program then asks to give him the same parameters for pre-processing the test data. _(I will try to implement classes for data to carry those parameters and prevent from user errors)_
     
-    + Some information is then showed, while the test data is pre-processed and its features extracted. The model then predicts the test labels and the output is saved in a .csv file.
+    + Some information is then showed, while the test data is pre-processed and its features extracted. The model then predicts the test labels and the output is saved in a _.csv_ file.
+    ![Example console output 4](https://github.com/NaasCraft/BOWtutorial/blob/master/source/img/exampleCO_4.png)
+        + All that is left to do is to upload this _.csv_ file on [this Kaggle page](https://www.kaggle.com/c/word2vec-nlp-tutorial/submissions/attach)
 
 
 ## Left to do
