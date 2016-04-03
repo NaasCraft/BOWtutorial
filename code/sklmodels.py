@@ -26,6 +26,19 @@ dataPath_, picklePath_ = main.dataPath_, main.picklePath_
 debug = main.debug
 
 def dataScaler( train ):
+	''' git description
++ __dataScaler__( train ) :
+    + _does_ : Fits a standard feature scaler on "train" data
+    + _returns_ : Fitted scaler (as _StandardScaler_)
+    + _called by_ : `python main.py -skl -f`
+    + _calls_ : __sklearn.preprocessing.StandardScaler__
+    + _arguments_ :
+        
+| type | name | description |
+| --- | --- | --- |
+| _list_ | train | List of train features to fit the scaler |
+	'''
+	
 	from sklearn.preprocessing import StandardScaler
 	
 	scaler = StandardScaler()
@@ -34,6 +47,22 @@ def dataScaler( train ):
 	return scaler
 
 def buildRF( features, label, n_est=100, verbose=False ):
+	''' git description
++ __buildRF__( features, label, n_est=100, verbose=False ) :
+    + _does_ : Fits a RandomForestClassifier with "n_est" estimators, on ("features", "label") data
+    + _returns_ : Fitted classifier (as _RandomForestClassifier_)
+    + _called by_ : __buildModel__
+    + _calls_ : __sklearn.ensemble.RandomForestClassifier__
+    + _arguments_ :
+        
+| type | name | description |
+| --- | --- | --- |
+| _list_ | features | List of train features to fit the model |
+| _list_ of _int_ | label | List of associated labels |
+| _int_ | n_est | Number of estimators for the RF |
+| _boolean_ | verbose | Controls console outputs |
+	'''
+	
 	from sklearn.ensemble import RandomForestClassifier
 	
 	if verbose: print( "Training the random forest model with " + str(n_est) + " estimators...\n" )
@@ -43,6 +72,8 @@ def buildRF( features, label, n_est=100, verbose=False ):
 	
 	if verbose: print( "Completed in " + str( time()-t ) + " seconds.\n" )
 	return forest
+	
+	
 	
 ''' NOT WORKING with scikit-learn version 0.17 (need 0.18)
 def buildMLP( features, label, verbose=False ):
@@ -57,7 +88,24 @@ def buildMLP( features, label, verbose=False ):
 	return mlp
 '''
 
+
+
 def buildSVM( features, label, verbose=False ):
+	''' git description
++ __buildSVM__( features, label, verbose=False ) :
+    + _does_ : Fits a SVM classifier with gaussian kernel, on ("features", "label") data
+    + _returns_ : Fitted classifier (as _SVC_)
+    + _called by_ : __buildModel__
+    + _calls_ : __sklearn.svm.SVC__
+    + _arguments_ :
+        
+| type | name | description |
+| --- | --- | --- |
+| _list_ | features | List of train features to fit the model |
+| _list_ of _int_ | label | List of associated labels |
+| _boolean_ | verbose | Controls console outputs |
+	'''
+	
 	from sklearn.svm import SVC
 	
 	if verbose: print( "Training the SVM model with gaussian kernel...\n" )
@@ -69,6 +117,22 @@ def buildSVM( features, label, verbose=False ):
 	return svc
 
 def buildKNN( features, label, verbose=False ):
+	''' git description
++ __buildKNN__( features, label, verbose=False ) :
+    + _does_ : Fits a k-NN classifier with k=3, on ("features", "label") data
+        + _[toEdit] add k as a parameter_
+    + _returns_ : Fitted classifier (as _KNeighborsClassifier_)
+    + _called by_ : __buildModel__
+    + _calls_ : __sklearn.neighbors.KNeighborsClassifier__
+    + _arguments_ :
+        
+| type | name | description |
+| --- | --- | --- |
+| _list_ | features | List of train features to fit the model |
+| _list_ of _int_ | label | List of associated labels |
+| _boolean_ | verbose | Controls console outputs |
+	'''
+	
 	from sklearn.neighbors import KNeighborsClassifier
 	
 	if verbose: print( "Training the K-NN model with k=3...\n" )
@@ -80,6 +144,22 @@ def buildKNN( features, label, verbose=False ):
 	return clf
 
 def buildModel( features, label, mode="rf", verbose=False ):
+	''' git description
++ __buildModel__( features, label, mode="rf", verbose=False ) :
+    + _does_ : Fits a classifier given by "mode", on ("features", "label") data
+    + _returns_ : Fitted model (as _?_, has to be a _sklearn_ classifier though)
+    + _called by_ : 
+    + _calls_ :
+    + _arguments_ :
+        
+| type | name | description |
+| --- | --- | --- |
+| _list_ | features | List of train features to fit the model |
+| _list_ of _int_ | label | List of associated labels |
+| _string_ | mode | Defines which model to train |
+| _boolean_ | verbose | Controls console outputs |
+	'''
+	
 	if mode == "rf":
 		in_n_est = int( raw_input( "Enter number of estimators for the Random Forest classifier : " ) )
 		return buildRF( features, label, in_n_est, verbose )
@@ -94,6 +174,24 @@ def buildModel( features, label, mode="rf", verbose=False ):
 		return buildKNN( features, label, verbose )
 
 def getBoWf( data=[], unpickle=False, verbose=False, m_f=5000, default=False, vect=False ):
+	''' git description
++ __getBoWf__( data=[], unpickle=False, verbose=False, m_f=5000, default=False, vect=False ) :
+    + _does_ : Extract bag of words "m_f" number of features from "data"
+    + _returns_ : Extracted features (as _ndarray_), maximum features (as _int_), BoW feature extractor (as _CountVectorizer_)
+    + _called by_ : `python main.py -skl`, __submission.run__
+    + _calls_ : __sklearn.feature_extraction.text.CountVectorizer__, __pickle.load__, __numpy.sum__, __numpy.rec.fromarrays__
+    + _arguments_ :
+        
+| type | name | description |
+| --- | --- | --- |
+| _list_ of _string_ | data | List of pre-processed reviews |
+| _boolean_ | unpickle | Loads train data (else uses given data) |
+| _boolean_ | verbose | Controls console outputs |
+| _int_ | m_f | Number of maximum features for the Bag of Words |
+| _boolean_ | default | Runs with default parameters (else asks user input) |
+| _CountVectorizer_ (from __sklearn__) | vect | Saved vectorizer to transform test data |
+	'''
+	
 	if not default:
 		print( "You required bag of words learning. Enter the following parameters : \n" )
 		m_f = int( raw_input( "Maximum features : " ) )

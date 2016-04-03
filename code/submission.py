@@ -25,6 +25,35 @@ dataPath_, picklePath_, outPath_ = main.dataPath_, main.picklePath_, main.outPat
 debug = main.debug
 
 def run( model, modelID, verb=False, re_level=0, sw_drop=True, stem=False, max_f=5000, vect=None, mode=False, wordModel=False, scale=False, dScaler=None ):
+	''' git description
++ __run__( model, modelID, verb=False, re_level=0, sw_drop=True, stem=False, max_f=5000, vect=None, mode=False, wordModel=False, scale=False, dScaler=None ) :
+    + _does_ : 
+        + Retrieves test data
+        + Pre-processes it
+        + Extract feature vectors according to "mode"
+        + Predicts the test labels with "model"
+        + Save the output as a Kaggle submission
+    + _returns_ : Predicted output (as _DataFrame_)
+    + _called by_ : `python main.py -s`
+    + _calls_ : __pandas.read_csv__, __pandas.DataFrame__, __preprocess.run__, __preprocess.fullPPtoW__, __sklmodels.getBoWf__, __w2v.loopFV__
+    + _arguments_ :
+        
+| type | name | description |
+| --- | --- | --- |
+| _classifier_ (from __sklearn__) | model | Trained model for prediction |
+| _string_ | modelID | Describes model and feature extraction mode for output |
+| _boolean_ | verb | Controls console outputs |
+| _int_ | re_level | Level of Regex treatment (0-3) |
+| _boolean_ | sw_drop | Should drop stop words |
+| _boolean_ | stem | Should apply Porter Stemming |
+| _int_ | max_f | Number of maximum features for the Bag of Words |
+| _CountVectorizer_ (from __sklearn__) | vect | Saved vectorizer to transform test data |
+| _string_ | mode | Feature extraction mode (None for BoW, "avg" or "cluster") |
+| _W2VModel_ (from __gensim__) | wordModel | Trained word vector representation model |
+| _boolean_ | scale | Apply data scaling |
+| _StandardScaler_ (from __sklearn__) | dScaler | Fitted data scaler |
+	'''
+	
 	# Test data retrieval
 	test = pd.read_csv(dataPath_+"testData.tsv", header=0, delimiter="\t", quoting=3 )
 

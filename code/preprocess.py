@@ -28,6 +28,20 @@ dataPath_, picklePath_ = main.dataPath_, main.picklePath_
 debug = main.debug
 
 def reSub( text, lSubs ):
+	''' git description
++ __reSub__( text, lSubs ) :
+    + _does_ : Performs a "lSubs" list of regular expression substitutions in the "text" string parameter
+    + _returns_ : Treated text (as _string_)
+    + _called by_ : __reTreatment__
+    + _calls_ : __copy.copy__, __re.sub__
+    + _arguments_ :
+        
+| type | name | description |
+| --- | --- | --- |
+| _string_ | text | Text to be treated |
+| _list_ of _list_ of _string_ | lSubs | List of Regex substitution pairs |
+	'''
+	
 	result = cp.copy(text)
 	
 	for i in range(len(lSubs)):
@@ -36,6 +50,20 @@ def reSub( text, lSubs ):
 	return result
 
 def reTreatment( text, level=0 ):
+	''' git description
++ __reTreatment__( text, level=0 ) :
+    + _does_ : Performs a Regex treatment on "text" string as defined by "level" parameter (0 keeps _only alphabetica_l chars, 1 adds _numbers_ as "num", 2 adds _punctuation_ as "punct", 3 adds _emoticons_ as "emo")
+    + _returns_ : Treated text (as _string_)
+    + _called by_ : __fullPPtoW__
+    + _calls_ : __reSub__
+    + _arguments_ :
+        
+| type | name | description |
+| --- | --- | --- |
+| _string_ | text | Text to be treated |
+| _int_ | level | Level of Regex treatment (0-3) |
+	'''
+	
 	# Regex substitution pairs
 	noAlphab_reS = ["[^a-zA-Z]+", " "]
 	num_reS = ["[0-9]+", " NUM "]
@@ -48,14 +76,57 @@ def reTreatment( text, level=0 ):
 	return reSub( text, total_reS[-(level+1):] )
 
 def rmStopword( words ):
+	''' git description
++ __rmStopword__( words ) :
+    + _does_ : Removes stopwords from the given "words" list of tokens
+    + _returns_ : Treated list of words (as _list_)
+    + _called by_ : __fullPPtoW__
+    + _calls_ : __nltk.corpus.stopwords__
+    + _arguments_ :
+        
+| type | name | description |
+| --- | --- | --- |
+| _list_ of _string_ | words | List of tokens to be treated |
+	'''
+	
 	stops_ = set( stopwords.words("english") )
 	return [w for w in words if not w in stops_]
 
 def pStem( words ): 
+	''' git description
++ __pStem__( words ) : Applies the Porter Stemming algorithm to the given list of tokens
+    + _does_ : Applies the Porter Stemming algorithm to the given "words" list of tokens
+    + _returns_ : Treated list of words (as _list_)
+    + _called by_ : __fullPPtoW__
+    + _calls_ : __nltk.stem.porter.PorterStemmer__
+    + _arguments_ :
+        
+| type | name | description |
+| --- | --- | --- |
+| _list_ of _string_ | words | List of tokens to be treated |
+	'''
+	
 	porter_stemmer_ = PorterStemmer()
 	return [porter_stemmer_.stem(w) for w in words]
 
 def fullPPtoW( review, re_level, sw_drop, stem, join_res=True ):
+	''' git description
++ __fullPPtoW__( review, re_level, sw_drop, stem, join_res=True ) :
+    + _does_ : Computes a full "review" string pre-processing, according to ("re_level", "sw_drop", "stem") parameters
+    + _returns_ : Treated "review" (as _list_ or _string_ depending on "join_res")
+    + _called by_ : __fullPPtoS__, __run__, __submission.run__
+    + _calls_ : __reTreatment__, __rmStopWords__, __pStem__, __bs4.BeautifulSoup__
+    + _arguments_ :
+        
+| type | name | description |
+| --- | --- | --- |
+| _string_ | review | Review to be pre-processed |
+| _int_ | re_level | Level of Regex treatment (0-3) |
+| _boolean_ | sw_drop | Should drop stop words |
+| _boolean_ | stem | Should apply Porter Stemming |
+| _boolean_ | join_res | Should return result as string (else as list of words) |
+	'''
+	
 	result = BeautifulSoup( review )
 	result = result.get_text().lower()
 	result = reTreatment( result, re_level )
@@ -75,6 +146,23 @@ def fullPPtoW( review, re_level, sw_drop, stem, join_res=True ):
 	
 tokenizer_ = nltk.data.load('tokenizers/punkt/english.pickle')
 def fullPPtoS( review, re_level, sw_drop, stem, tk=tokenizer_ ):
+	''' git description
++ __fullPPtoS__( review, re_level, sw_drop, stem, tk=tokenizer_ ) :
+    + _does_ : Computes a full "review" string pre-processing into sentences split by "tk", according to ("re_level", "sw_drop", "stem") parameters
+    + _returns_ : Treated review into list of sentences (as _list_)
+    + _called by_ : __run__
+    + _calls_ : __fullPPtoW__
+    + _arguments_ :
+        
+| type | name | description |
+| --- | --- | --- |
+| _string_ | review | Review to be pre-processed into sentences |
+| _int_ | re_level | Level of Regex treatment (0-3) |
+| _boolean_ | sw_drop | Should drop stop words |
+| _boolean_ | stem | Should apply Porter Stemming |
+| _Tokenizer_ (from __nltk__) | tk | Tokenizer to split into sentences |
+	'''
+	
 	sentences = tk.tokenize(review.decode('utf-8').strip())
 	result = []
 	for s in sentences:
@@ -84,6 +172,26 @@ def fullPPtoS( review, re_level, sw_drop, stem, tk=tokenizer_ ):
 	return result
 	
 def run( data, verbose=False, re_level=0, sw_drop=True, stem=False, asW2V=False ):
+	''' git description
++ __run__( data, verbose=False, re_level=0, sw_drop=True, stem=False, asW2V=False ) :
+    + _does_ : Full "data" pre-processing according to given parameters
+    + _returns_ : (__2__ values)
+        + if "asW2V" : Treated data as sentences (as _list_), ... as words (as _list_)
+        + else : Treated data as words (as _list_), empty list
+    + _called by_ : `python main.py -pp`, __submission.run__
+    + _calls_ : __time.time__, __fullPPtoS__, __fullPPtoW__
+    + _arguments_ :
+        
+| type | name | description |
+| --- | --- | --- |
+| _ndarray_ (from __numpy__) | data | Dataset to be pre-processed |
+| _boolean_ | verbose | Controls console outputs |
+| _int_ | re_level | Level of Regex treatment (0-3) |
+| _boolean_ | sw_drop | Should drop stop words |
+| _boolean_ | stem | Should apply Porter Stemming |
+| _boolean_ | asW2V | Should use sentences (else just words) |
+	'''
+	
 	print( "\nRunning the data pre-processing with following parameters : \n" + \
 		"	Level of precision maintained after the regex simplification : " + str(re_level) + "\n" + \
 		"	Dropping of stop words : " + str(sw_drop) + "\n" + \

@@ -28,6 +28,21 @@ dataPath_, picklePath_, modelPath_ = main.dataPath_, main.picklePath_, main.mode
 debug = main.debug
 
 def makeFeatureVec( words, model, num_features ):
+	''' git description
++ __makeFeatureVec__( words, model, num_features ) :
+    + _does_ : Computes averaging the word vectors obtained by "model" on "words"
+    + _returns_ : Features vector (as _ndarray_)
+    + _called by_ : __loopFV__
+    + _calls_ : __numpy.zeros__, __numpy.add__, __numpy.divide__
+    + _arguments_ :
+        
+| type | name | description |
+| --- | --- | --- |
+| _list_ of _string_ | words | List of words to extract features from |
+| _W2VModel_ (from __gensim__) | model | Trained word vector representation model |
+| _int_ | num_features | Size of word vector representations |
+	'''
+	
 	num_features = model.syn0.shape[1]
 	
 	# Pre-initialize an empty numpy array (for speed)
@@ -45,6 +60,21 @@ def makeFeatureVec( words, model, num_features ):
 	return featureVec
 
 def showClusters ( map, n ):
+	''' git description
++ __showClusters__ ( map, n ) :
+    + _does_ : Prints the "n" first clusters in "map"
+    + _returns_ : _Nothing_
+    + _called by_ : ...
+        + _[toEdit] should be called in loopFV_
+    + _calls_ : _Nothing_
+    + _arguments_ :
+        
+| type | name | description |
+| --- | --- | --- |
+| _dict_ | map | Map of word cluster centroids |
+| _int_ | n | Number of first clusters to show |
+	'''
+	
 	# For the first n clusters
 	for cluster in xrange(0,n):
 		# Print the cluster number  
@@ -59,6 +89,20 @@ def showClusters ( map, n ):
 		print words
 
 def kMeansFit ( data, num_clusters ):
+	''' git description
++ __kMeansFit__ ( data, num_clusters ) :
+    + _does_ : Extracts "num_clusters" clusters with KMeans clustering on "data"
+    + _returns_ : Centroids indexes (as _list_)
+    + _called by_ : __loopFV__
+    + _calls_ : __time.time__, __sklearn.cluster.KMeans__
+    + _arguments_ :
+        
+| type | name | description |
+| --- | --- | --- |
+| _ndarray_ (from __numpy__) | data | Vocabulary learned by the W2V model |
+| _int_ | num_clusters | Number of clusters to compute by KMeans() |
+	'''
+	
 	t = time()
 	# Initalize a k-means object and use it to extract centroids
 	kmeans_clustering = KMeans( n_clusters = num_clusters )
@@ -69,6 +113,20 @@ def kMeansFit ( data, num_clusters ):
 	return idx
 		
 def createBagOfCentroids( wordlist, word_centroid_map ):
+	''' git description
++ __createBagOfCentroids__( wordlist, word_centroid_map ) :
+    + _does_ : Extract bag of centroids (given by "word_centroid_map") features for "wordlist"
+    + _returns_ : Features vector (as _ndarray_)
+    + _called by_ : __loopFV__
+    + _calls_ : __numpy.zeros__
+    + _arguments_ :
+        
+| type | name | description |
+| --- | --- | --- |
+| _list_ of _string_ | wordlist | List of words to extract features from |
+| _dict_ | word_centroid_map | Map of word cluster centroids |
+	'''
+	
 	num_centroids = max( word_centroid_map.values() ) + 1
 	
 	# Pre-allocate the bag of centroids vector (for speed)
@@ -84,8 +142,21 @@ def createBagOfCentroids( wordlist, word_centroid_map ):
 	return bag_of_centroids
 
 def loopFV( reviews, model, mode="avg", dump=False ):
-	# Given a set of reviews (each one a list of words), calculate 
-	# the average feature vector for each one and return a 2D numpy array 
+	''' git description
++ __loopFV__( reviews, model, mode="avg", dump=False ) :
+    + _does_ : Computes a feature vector, according to "mode", for "reviews" given "model" (wich is either saved or loaded depending on "dump")
+    + _returns_ : Features vectors set for given data (as _ndarray_)
+    + _called by_ : `python main.py -skl`, __submission.run__
+    + _calls_ : __kMeansFit__, __pickle.dump__, __numpy.zeros__, __makeFeatureVec__, __createBagOfCentroids__
+    + _arguments_ :
+        
+| type | name | description |
+| --- | --- | --- |
+| _list_ of _list_ of _string_ | reviews | List of reviews as lists of words |
+| _W2VModel_ (from __gensim__) | model | Trained word vector representation model |
+| _string_ | mode | Feature extraction mode ("avg" or "cluster") |
+| _boolean_ | dump | Computes clusters and pickles the word cluster centroids map (else loads it) |
+	'''
 	
 	num_features = model.syn0.shape[1]
 	
@@ -130,6 +201,20 @@ def loopFV( reviews, model, mode="avg", dump=False ):
 	return reviewFeatureVecs
 
 def load( model_name, rd=True ):
+	''' git description
++ __load__( model_name, rd=True ) :
+    + _does_ : Loads "model_name" word2vec trained model
+    + _returns_ : Loaded model (as _Word2Vec_)
+    + _called by_ : __run__
+    + _calls_ : __gensim.models.word2vec.Word2Vec.load__
+    + _arguments_ :
+        
+| type | name | description |
+| --- | --- | --- |
+| _string_ | model_name | Name of model to load |
+| _boolean_ | rd | Trims unneeded model memory but prevents model to be trained again |
+	'''
+	
 	result = word2vec.Word2Vec.load(modelPath_+model_name)
 	if rd:
 		result.init_sims(replace=True)
@@ -137,12 +222,40 @@ def load( model_name, rd=True ):
 	return result
 
 def notMatch( model, words, verbose ):
+	''' git description
++ __notMatch__( model, words, verbose ) :
+    + _does_ : Tests (and may print) "model" on ability to fin most dissimilar word amongst "words"
+    + _returns_ : Predicted most dissimilar word (as _string_)
+    + _called by_ : __modelTesting__
+    + _calls_ : _Nothing_
+    + _arguments_ :
+        
+| type | name | description |
+| --- | --- | --- |
+| _W2VModel_ (from __gensim__) | model | Trained word vector representation model |
+| _list_ of _string_ | words | List of words to test |
+| _boolean_ | verbose | Controls console outputs |
+	'''
+	
 	result = model.doesnt_match( words )
 	if verbose: print("Most dissimilar word from " + str(words) + " : " + result )
 	
 	return result
 	
 def modelTesting( model ):
+	''' git description
++ __modelTesting__( model ) :
+    + _does_ : Executes some tests on given "model"
+    + _returns_ : _Nothing_
+    + _called by_ : __run__
+    + _calls_ : __notMatch__
+    + _arguments_ :
+        
+| type | name | description |
+| --- | --- | --- |
+| _W2VModel_ (from __gensim__) | model | Trained word vector representation model |
+	'''
+	
 	print("\nSome tests for the model :\n")
 	list1 = "man woman child kitchen".split()
 	list2 = "france england germany berlin".split()
@@ -156,6 +269,25 @@ def modelTesting( model ):
 		str(model.most_similar(positive=['woman', 'king'], negative=['man'])))
 
 def run( sentences, save=False, default=False, verbose=False, ready=True, lf=False, loadname="" ):
+	''' git description
++ __run__( sentences, save=False, default=False, verbose=False, ready=True, lf=False, loadname="" ) :
+    + _does_ : Performs a Word2Vec model training with given "sentences" (or loads one)
+    + _returns_ : Trained model (as _Word2Vec_), word vectors size (as _int_)
+    + _called by_ : `python main.py -skl`
+    + _calls_ : __logging.basicConfig__, __logging.INFO__, __load__, __gensim.models.word2vec.Word2Vec__, __modelTesting__
+    + _arguments_ :
+        
+| type | name | description |
+| --- | --- | --- |
+| _list_ of _list_ of _string_ | sentences | List of sentences as lists of words to train the model |
+| _boolean_ | save | Saves model once trained |
+| _boolean_ | default | Runs with default parameters (else asks user input) |
+| _boolean_ | verbose | Controls console outputs |
+| _boolean_ | ready | Trims unneeded model memory but prevents model to be trained again |
+| _boolean_ | lf | Loads _loadname_ trained model |
+| _string_ | loadname | Name of model to load |
+	'''
+	
 	if verbose:
 		import logging
 		logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)

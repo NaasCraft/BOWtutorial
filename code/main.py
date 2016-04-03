@@ -30,11 +30,38 @@ outPath_ = os.path.join( fileDir_, "submission/tmp/")
 modelPath_ = os.path.join( fileDir_, "models/tmp/")
 
 def debug( var, repr ):
+	''' git description
++ __debug__( var, repr ) :
+    + _does_ : Print out "debug repr" followed by (_var_) value
+    + _returns_ : _Nothing_
+    + _imported in_ : `preprocess.py`, `sklmodels.py`, `submission.py`, `w2v.py`
+    + _calls_ : _Nothing_
+    + _arguments_ :
+        
+| type | name | description |
+| --- | --- | --- |
+| any | var | Variable to debug |
+| _string_ | repr | Variable representation |
+	'''
+	
 	print( "debug "+repr+" : "+str(var) )
 
 if __name__ == "__main__":
 	if _help:
-		print( "Help message yet to be written... TODO" )
+		messages = [ '-v : "Verbose", controls console outputs.', \
+					'-p : "Pickling", controls whether to save the data or not, into `pickles/` folder.', \
+					'-h : "Help", if present, simply show a description of command line arguments.', \
+					'-d : "Default", runs with default parameters.', \
+					'-nd : "No Data", runs without loading data. Used for language model testing.', \
+					'-fe : "Feature extraction", runs the feature extraction (according to user inputs).', \
+					'-m : "Modelling", runs the model training (according to user inputs).', \
+					'-s : "Submit", runs the predicting and submission writing.' ]
+					
+		print( "Help about command line arguments : \n" )
+		for m in messages:
+			print( m )
+		
+		print( "For more information, please see : github.com/NaasCraft/BOWtutorial" )
 	else:
 		# Data reading
 		train = pd.read_csv( dataPath_+"labeledTrainData.tsv", header=0, delimiter="\t", quoting=3 )
