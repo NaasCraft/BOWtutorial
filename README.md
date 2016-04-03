@@ -40,7 +40,7 @@ Here's an example :
 + __Part 1 : Preprocessing__
     + Run : `python main.py -v -p -pp`
     
-        + "-v" argument will make the program output messages in the console
+        + `-v` argument will make the program output messages in the console
         + "-p" argument will force the pickling of pre-processed data
         + "-pp" argument will run the pre-processing script
         
