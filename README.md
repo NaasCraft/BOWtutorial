@@ -42,6 +42,7 @@ Here's an example :
     ```
     python main.py -v -p -pp
     ```
+    
         + `-v` argument will make the program output messages in the console
         + `-p` argument will force the pickling of pre-processed data
         + `-pp` argument will run the pre-processing script
@@ -59,6 +60,7 @@ Here's an example :
     ```
     python main.py -v -fe -m -s
     ```
+    
         + `-fe` argument will run the feature extraction script
         + `-m` argument will run the model fitting script
         + `-s` argument will run the submission script
