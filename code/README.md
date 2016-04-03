@@ -2,7 +2,7 @@
 
 ## `main.py`
 
-#### Command Line Arguments
+#### Command Line Arguments (9)
 
 + __-v__ : "Verbose", controls console outputs.
 + __-p__ : "Pickling", controls whether to save the data or not, into `pickles/` folder.
@@ -15,7 +15,7 @@
 + __-s__ : "Submit", runs the predicting and submission writing.
 
 
-#### Functions
+#### Functions (1)
 
 + __debug__( var, repr ) :
     + _does_ : Print out "debug repr" followed by (_var_) value
@@ -32,16 +32,16 @@
 
 ## `preprocess.py`
 
-#### Command Line Arguments
+#### Command Line Arguments (2)
 
 + __-v__ : "Verbose", controls console outputs.
 + __-d__ : "Default", runs with default parameters.
 
-#### Functions
+#### Functions (7)
 
 + __reSub__( text, lSubs ) :
     + _does_ : Performs a "lSubs" list of regular expression substitutions in the "text" string parameter
-    + _returns_ : Treated "text" (as _string_)
+    + _returns_ : Treated text (as _string_)
     + _called by_ : __reTreatment__
     + _calls_ : __copy.copy__, __re.sub__
     + _arguments_ :
@@ -136,20 +136,20 @@
 
 ## `sklmodels.py`
 
-#### Command Line Arguments
+#### Command Line Arguments (3)
 
 + __-v__ : "Verbose", controls console outputs.
 + __-u__ : "Unpickling", controls whether to load the data or not, from `pickles/` folder.
 + __-d__ : "Default", runs with default parameters.
 
 
-#### Functions
+#### Functions (6)
 
 + __dataScaler__( train ) :
-    + _does_ : 
-    + _returns_ :  (as __)
-    + _called by_ :
-    + _calls_ :
+    + _does_ : Fits a standard feature scaler on "train" data
+    + _returns_ : Fitted scaler (as _StandardScaler_)
+    + _called by_ : `python main.py -skl -f`
+    + _calls_ : __sklearn.preprocessing.StandardScaler__
     + _arguments_ :
         
 | type | name | description |
@@ -157,10 +157,10 @@
 | _list_ | train | List of train features to fit the scaler |
 
 + __buildRF__( features, label, n_est=100, verbose=False ) :
-    + _does_ : 
-    + _returns_ :  (as __)
-    + _called by_ :
-    + _calls_ :
+    + _does_ : Fits a RandomForestClassifier with "n_est" estimators, on ("features", "label") data
+    + _returns_ : Fitted classifier (as _RandomForestClassifier_)
+    + _called by_ : __buildModel__
+    + _calls_ : __sklearn.ensemble.RandomForestClassifier__
     + _arguments_ :
         
 | type | name | description |
@@ -171,10 +171,10 @@
 | _boolean_ | verbose | Controls console outputs |
 
 + __buildSVM__( features, label, verbose=False ) :
-    + _does_ : 
-    + _returns_ :  (as __)
-    + _called by_ :
-    + _calls_ :
+    + _does_ : Fits a SVM classifier with gaussian kernel, on ("features", "label") data
+    + _returns_ : Fitted classifier (as _SVC_)
+    + _called by_ : __buildModel__
+    + _calls_ : __sklearn.svm.SVC__
     + _arguments_ :
         
 | type | name | description |
@@ -184,10 +184,11 @@
 | _boolean_ | verbose | Controls console outputs |
 
 + __buildKNN__( features, label, verbose=False ) :
-    + _does_ :
-    + _returns_ :  (as __)
-    + _called by_ :
-    + _calls_ :
+    + _does_ : Fits a k-NN classifier with k=3, on ("features", "label") data
+        + _[toEdit] add k as a parameter_
+    + _returns_ : Fitted classifier (as _KNeighborsClassifier_)
+    + _called by_ : __buildModel__
+    + _calls_ : __sklearn.neighbors.KNeighborsClassifier__
     + _arguments_ :
         
 | type | name | description |
@@ -197,9 +198,9 @@
 | _boolean_ | verbose | Controls console outputs |
 
 + __buildModel__( features, label, mode="rf", verbose=False ) :
-    + _does_ : 
-    + _returns_ :  (as __)
-    + _called by_ :
+    + _does_ : Fits a classifier given by "mode", on ("features", "label") data
+    + _returns_ : Fitted model (as _?_, has to be a _sklearn_ classifier though)
+    + _called by_ : 
     + _calls_ :
     + _arguments_ :
         
@@ -211,10 +212,10 @@
 | _boolean_ | verbose | Controls console outputs |
 
 + __getBoWf__( data=[], unpickle=False, verbose=False, m_f=5000, default=False, vect=False ) :
-    + _does_ :
-    + _returns_ :  (as __)
-    + _called by_ :
-    + _calls_ :
+    + _does_ : Extract bag of words "m_f" number of features from "data"
+    + _returns_ : Extracted features (as _ndarray_), maximum features (as _int_), BoW feature extractor (as _CountVectorizer_)
+    + _called by_ : 
+    + _calls_ : __sklearn.feature_extraction.text.CountVectorizer__, __pickle.load__, __numpy.sum__, __numpy.rec.fromarrays__
     + _arguments_ :
         
 | type | name | description |
@@ -229,13 +230,13 @@
 
 ## `submission.py`
 
-#### Command Line Arguments
+#### Command Line Arguments (4)
 
 + __-v__ : "Verbose", controls console outputs.
 + __-u__ : "Unpickling", controls whether to load the data or not, from `pickles/` folder.
 + __-d__ : "Default", runs with default parameters.
 
-#### Functions
+#### Functions (9)
 
 + __run__( model, modelID, verb=False, re_level=0, sw_drop=True, stem=False, max_f=5000, vect=None, mode=False, wordModel=False, scale=False, dScaler=None ) :
     + _does_ :
@@ -262,14 +263,14 @@
 
 ## `w2v.py`
 
-#### Command Line Arguments
+#### Command Line Arguments ()
 
 + __-v__ : "Verbose", controls console outputs.
 + __-u__ : "Unpickling", controls whether to load the data or not, from `pickles/` folder.
 + __-d__ : "Default", runs with default parameters.
 + __-s__ : "Save", controls whether to save the language model, into `models/` folder.
 
-#### Functions
+#### Functions ()
 
 + __makeFeatureVec__( words, model, num_features ) :
     + _does_ :
