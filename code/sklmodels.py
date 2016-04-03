@@ -143,6 +143,8 @@ def getBoWf( data=[], unpickle=False, verbose=False, m_f=5000, default=False, ve
 		
 		return bowFeatures, m_f, vect
 	
+'''
 if __name__ == "__main__":
 	# Bag of word extraction as default
 	getBoWf( data, unpickle=_unpkl, verbose=_verb, default=_default )
+'''

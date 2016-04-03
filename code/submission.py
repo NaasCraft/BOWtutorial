@@ -9,10 +9,8 @@ import pickle as pkl
 from time import time
 import numpy as np
 import pandas as pd
-from sklearn.feature_extraction.text import CountVectorizer
 import sys
 import os
-from sklearn.ensemble import RandomForestClassifier
 import main
 
 ### Command Line Arguments ###
@@ -32,6 +30,7 @@ def run( model, modelID, verb=False, re_level=0, sw_drop=True, stem=False, max_f
 
 	if verb: print ("\nTest dataset shape : " + str( test.shape ) )
 	
+	# Correct following if else statement with preprocess.run ability to give multiple values
 	if not mode:
 		import preprocess
 		ppTest, _empt_ = preprocess.run( test, verbose=verb, re_level=re_level, sw_drop=sw_drop, stem=stem )
@@ -53,8 +52,6 @@ def run( model, modelID, verb=False, re_level=0, sw_drop=True, stem=False, max_f
 		testFeatures = w2v.loopFV( clean_test_reviews, wordModel, mode )
 	
 	if verb: print( "Example test feature (before scaling) : \n" + str( testFeatures[0] ) + "\n" )
-	if mode=="cluster":
-					debug(sum(testFeatures[0]), "sum(testFeatures[0])")
 	
 	if scale:
 		testFeatures = dScaler.transform( testFeatures )

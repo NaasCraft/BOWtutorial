@@ -27,7 +27,7 @@ dataPath_, picklePath_ = main.dataPath_, main.picklePath_
 ### Debugging function ###
 debug = main.debug
 
-def reSub( text, lSubs ): # Performs a "lSubs" list of regular expression substitutions in the "text" string parameter
+def reSub( text, lSubs ):
 	result = cp.copy(text)
 	
 	for i in range(len(lSubs)):
@@ -37,7 +37,7 @@ def reSub( text, lSubs ): # Performs a "lSubs" list of regular expression substi
 
 def reTreatment( text, level=0 ):
 	# Regex substitution pairs
-	noAlphab_reS = ["[^a-zA-Z]", " "]
+	noAlphab_reS = ["[^a-zA-Z]+", " "]
 	num_reS = ["[0-9]+", " NUM "]
 	punct_reS = ["[\?!:;\.\"]", " PUNCT "] # We keep each mark as a single token, to emphasize structures like "!!!!" or "!?!?"
 	emoticon_reS = ["[<>]?[:;=8][\-o\*\']?[\)\]\(\[dDpP/\:\}\{@\|\\]|[\)\]\(\[dDpP/\:\}\{@\|\\][\-o\*\']?[:;=8][<>]?", " EMO "]
@@ -47,12 +47,12 @@ def reTreatment( text, level=0 ):
 	
 	return reSub( text, total_reS[-(level+1):] )
 
-stops_ = set( stopwords.words("english") )
-def rmStopword( words ): # Removes stopwords from the given list of tokens
+def rmStopword( words ):
+	stops_ = set( stopwords.words("english") )
 	return [w for w in words if not w in stops_]
 
-porter_stemmer_ = PorterStemmer()
-def pStem( words ): # Applies the Porter Stemming algorithm to the given list of tokens
+def pStem( words ): 
+	porter_stemmer_ = PorterStemmer()
 	return [porter_stemmer_.stem(w) for w in words]
 
 def fullPPtoW( review, re_level, sw_drop, stem, join_res=True ):
@@ -66,6 +66,8 @@ def fullPPtoW( review, re_level, sw_drop, stem, join_res=True ):
 	else:
 		if stem:
 			result = pStem( result.split() )
+		else:
+			result = result.split()
 	if join_res:
 		return ( " ".join(result) )
 	else:
@@ -104,7 +106,6 @@ def run( data, verbose=False, re_level=0, sw_drop=True, stem=False, asW2V=False 
 	t = time()-t
 	print( "Preprocessing completed. Total time : " + str(t) + " seconds.\n\n" )
 	
-	'''
 	if verbose:
 		# BeautifulSoup preprocessing cleans off any HTML tag
 		expl11 = BeautifulSoup( data["review"][0] )
@@ -130,15 +131,15 @@ def run( data, verbose=False, re_level=0, sw_drop=True, stem=False, asW2V=False 
 		# [Extension] Stemming with nltk, using the Porter stemming algorithm
 		expl51, expl52, expl53 = pStem(expl41), pStem(expl42), pStem(expl43)
 		print( "First 20 tokens after removing stopwords (only alphabetical) and Porter stemming : \n" + str( expl51[:20] ) + "\n" )
-	'''
 	
 	if pp_data:
 		return pp_data, pp_data_w
 	else:
 		return pp_data_w, []
-	
+'''	
 if __name__ == "__main__":
 	# Data reading
 	train = pd.read_csv( dataPath+"labeledTrainData.tsv", header=0, delimiter="\t", quoting=3 )
 	
 	run( train, verbose=_verb )
+'''

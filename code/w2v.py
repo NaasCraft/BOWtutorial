@@ -110,7 +110,6 @@ def loopFV( reviews, model, mode="avg", dump=False ):
 			word_centroid_map = pkl.load(open( "pickles/tmp/centroid_map.pkl","rb" ))
 			
 		num_features = max( word_centroid_map.values() ) + 1
-		debug(num_features, "num of centroids")
 		
 	# Preallocate a 2D numpy array, for speed
 	reviewFeatureVecs = np.zeros( (len(reviews),num_features), dtype="float32" )
@@ -197,6 +196,8 @@ def run( sentences, save=False, default=False, verbose=False, ready=True, lf=Fal
 	
 	return model, num_features
 	
+'''
 if __name__ == "__main__":
 	# Word2Vec model build
 	run( sentences, save=_save, default=_default, verbose=_verb, ready=True, load=False, loadname="" )
+'''

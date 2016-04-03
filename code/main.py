@@ -97,9 +97,8 @@ if __name__ == "__main__":
 				
 				if in_asW2V: ppTrain += ul_ppTrain
 				if _verb: print( "\nPreprocessed data unpickling successfully completed in " + str( time()-t ) + " seconds." )
-				
-			else:
-				ppTrain=[]
+			
+			debug(ppTrain[0], "ppTrain[0]")
 			
 			while in_asW2V:
 				import w2v
