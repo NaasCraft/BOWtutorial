@@ -41,8 +41,8 @@ Here's an example :
     + Run : `python main.py -v -p -pp`
     
         + `-v` argument will make the program output messages in the console
-        + "-p" argument will force the pickling of pre-processed data
-        + "-pp" argument will run the pre-processing script
+        + `-p` argument will force the pickling of pre-processed data
+        + `-pp` argument will run the pre-processing script
         
     + You will be prompted something like this :
     ![Example console output 1](https://github.com/NaasCraft/BOWtutorial/blob/master/source/img/exampleCO_1.png)
@@ -55,9 +55,9 @@ Here's an example :
 + __Part 2 : Feature Extraction__
     + Run this code : `python main.py -v -fe -m -s`
     
-        + "-fe" argument will run the feature extraction script
-        + "-m" argument will run the model fitting script
-        + "-s" argument will run the submission script
+        + `-fe` argument will run the feature extraction script
+        + `-m` argument will run the model fitting script
+        + `-s` argument will run the submission script
     
     + You will have to specify you don't want to use Word2Vec, enter the number of features (here 5000), and will then be prompted multiple information about the extracted features :
     ![Example console output 2](https://github.com/NaasCraft/BOWtutorial/blob/master/source/img/exampleCO_2.png)
