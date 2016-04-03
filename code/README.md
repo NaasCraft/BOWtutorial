@@ -214,7 +214,7 @@
 + __getBoWf__( data=[], unpickle=False, verbose=False, m_f=5000, default=False, vect=False ) :
     + _does_ : Extract bag of words "m_f" number of features from "data"
     + _returns_ : Extracted features (as _ndarray_), maximum features (as _int_), BoW feature extractor (as _CountVectorizer_)
-    + _called by_ : 
+    + _called by_ : `python main.py -skl`, __submission.run__
     + _calls_ : __sklearn.feature_extraction.text.CountVectorizer__, __pickle.load__, __numpy.sum__, __numpy.rec.fromarrays__
     + _arguments_ :
         
@@ -230,19 +230,24 @@
 
 ## `submission.py`
 
-#### Command Line Arguments (4)
+#### Command Line Arguments (3)
 
 + __-v__ : "Verbose", controls console outputs.
 + __-u__ : "Unpickling", controls whether to load the data or not, from `pickles/` folder.
 + __-d__ : "Default", runs with default parameters.
 
-#### Functions (9)
+#### Functions (1)
 
 + __run__( model, modelID, verb=False, re_level=0, sw_drop=True, stem=False, max_f=5000, vect=None, mode=False, wordModel=False, scale=False, dScaler=None ) :
-    + _does_ :
-    + _returns_ :  (as __)
-    + _called by_ :
-    + _calls_ :
+    + _does_ : 
+        + Retrieves test data
+        + Pre-processes it
+        + Extract feature vectors according to "mode"
+        + Predicts the test labels with "model"
+        + Save the output as a Kaggle submission
+    + _returns_ : Predicted output (as _DataFrame_)
+    + _called by_ : `python main.py -s`
+    + _calls_ : __pandas.read_csv__, __pandas.DataFrame__, __preprocess.run__, __preprocess.fullPPtoW__, __sklmodels.getBoWf__, __w2v.loopFV__
     + _arguments_ :
         
 | type | name | description |
@@ -263,20 +268,20 @@
 
 ## `w2v.py`
 
-#### Command Line Arguments ()
+#### Command Line Arguments (4)
 
 + __-v__ : "Verbose", controls console outputs.
 + __-u__ : "Unpickling", controls whether to load the data or not, from `pickles/` folder.
 + __-d__ : "Default", runs with default parameters.
 + __-s__ : "Save", controls whether to save the language model, into `models/` folder.
 
-#### Functions ()
+#### Functions (9)
 
 + __makeFeatureVec__( words, model, num_features ) :
-    + _does_ :
-    + _returns_ :  (as __)
-    + _called by_ :
-    + _calls_ :
+    + _does_ : Computes averaging the word vectors obtained by "model" on "words"
+    + _returns_ : Features vector (as _ndarray_)
+    + _called by_ : __loopFV__
+    + _calls_ : __numpy.zeros__, __numpy.add__, __numpy.divide__
     + _arguments_ :
         
 | type | name | description |
@@ -286,10 +291,11 @@
 | _int_ | num_features | Size of word vector representations |
 
 + __showClusters__ ( map, n ) :
-    + _does_ :
-    + _returns_ :  (as __)
-    + _called by_ :
-    + _calls_ :
+    + _does_ : Prints the "n" first clusters in "map"
+    + _returns_ : _Nothing_
+    + _called by_ : ...
+        + _[toEdit] should be called in loopFV_
+    + _calls_ : _Nothing_
     + _arguments_ :
         
 | type | name | description |
@@ -298,10 +304,10 @@
 | _int_ | n | Number of first clusters to show |
 
 + __kMeansFit__ ( data, num_clusters ) :
-    + _does_ :
-    + _returns_ :  (as __)
-    + _called by_ :
-    + _calls_ :
+    + _does_ : Extracts "num_clusters" clusters with KMeans clustering on "data"
+    + _returns_ : Centroids indexes (as _list_)
+    + _called by_ : __loopFV__
+    + _calls_ : __time.time__, __sklearn.cluster.KMeans__
     + _arguments_ :
         
 | type | name | description |
@@ -310,10 +316,10 @@
 | _int_ | num_clusters | Number of clusters to compute by KMeans() |
 
 + __createBagOfCentroids__( wordlist, word_centroid_map ) :
-    + _does_ :
-    + _returns_ :  (as __)
-    + _called by_ :
-    + _calls_ :
+    + _does_ : Extract bag of centroids (given by "word_centroid_map") features for "wordlist"
+    + _returns_ : Features vector (as _ndarray_)
+    + _called by_ : __loopFV__
+    + _calls_ : __numpy.zeros__
     + _arguments_ :
         
 | type | name | description |
@@ -322,10 +328,10 @@
 | _dict_ | word_centroid_map | Map of word cluster centroids |
 
 + __loopFV__( reviews, model, mode="avg", dump=False ) :
-    + _does_ :
-    + _returns_ :  (as __)
-    + _called by_ :
-    + _calls_ :
+    + _does_ : Computes a feature vector, according to "mode", for "reviews" given "model" (wich is either saved or loaded depending on "dump")
+    + _returns_ : Features vectors set for given data (as _ndarray_)
+    + _called by_ : `python main.py -skl`, __submission.run__
+    + _calls_ : __kMeansFit__, __pickle.dump__, __numpy.zeros__, __makeFeatureVec__, __createBagOfCentroids__
     + _arguments_ :
         
 | type | name | description |
@@ -336,10 +342,10 @@
 | _boolean_ | dump | Computes clusters and pickles the word cluster centroids map (else loads it) |
 
 + __load__( model_name, rd=True ) :
-    + _does_ :
-    + _returns_ :  (as __)
-    + _called by_ :
-    + _calls_ :
+    + _does_ : Loads "model_name" word2vec trained model
+    + _returns_ : Loaded model (as _Word2Vec_)
+    + _called by_ : __run__
+    + _calls_ : __gensim.models.word2vec.Word2Vec.load__
     + _arguments_ :
         
 | type | name | description |
@@ -348,10 +354,10 @@
 | _boolean_ | rd | Trims unneeded model memory but prevents model to be trained again |
 
 + __notMatch__( model, words, verbose ) :
-    + _does_ :
-    + _returns_ :  (as __)
-    + _called by_ :
-    + _calls_ :
+    + _does_ : Tests (and may print) "model" on ability to fin most dissimilar word amongst "words"
+    + _returns_ : Predicted most dissimilar word (as _string_)
+    + _called by_ : __modelTesting__
+    + _calls_ : _Nothing_
     + _arguments_ :
         
 | type | name | description |
@@ -361,10 +367,10 @@
 | _boolean_ | verbose | Controls console outputs |
 
 + __modelTesting__( model ) :
-    + _does_ :
-    + _returns_ :  (as __)
-    + _called by_ :
-    + _calls_ :
+    + _does_ : Executes some tests on given "model"
+    + _returns_ : _Nothing_
+    + _called by_ : __run__
+    + _calls_ : __notMatch__
     + _arguments_ :
         
 | type | name | description |
@@ -372,10 +378,10 @@
 | _W2VModel_ (from __gensim__) | model | Trained word vector representation model |
 
 + run( sentences, save=False, default=False, verbose=False, ready=True, lf=False, loadname="" ) :
-    + _does_ :
-    + _returns_ :  (as __)
-    + _called by_ :
-    + _calls_ :
+    + _does_ : Performs a Word2Vec model training with given "sentences" (or loads one)
+    + _returns_ : Trained model (as _Word2Vec_), word vectors size (as _int_)
+    + _called by_ : `python main.py -skl`
+    + _calls_ : __logging.basicConfig__, __logging.INFO__, __load__, __gensim.models.word2vec.Word2Vec__, __modelTesting__
     + _arguments_ :
         
 | type | name | description |
