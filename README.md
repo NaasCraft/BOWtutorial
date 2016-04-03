@@ -38,15 +38,11 @@ Here's an example :
     + extracted from pre-processed data (Regex0, no stop words, no stemming)
     
 + __Part 1 : Preprocessing__
-    + Run :
+    + Run : `python main.py -v -p -pp`
     
-```
-python main.py -v -p -pp
-```
-    
-        * `-v` argument will make the program output messages in the console
-        * `-p` argument will force the pickling of pre-processed data
-        * `-pp` argument will run the pre-processing script
+        + `-v` argument will make the program output messages in the console
+        + `-p` argument will force the pickling of pre-processed data
+        + `-pp` argument will run the pre-processing script
         
     + You will be prompted something like this :
     ![Example console output 1](https://github.com/NaasCraft/BOWtutorial/blob/master/source/img/exampleCO_1.png)
@@ -57,11 +53,7 @@ python main.py -v -p -pp
     + Now that you have pickled your pre-processed data, it is time for feature extraction, model fitting, and prediction submitting _(... I will split these steps in a further update, with a way of saving the data between each step. For now, the extracted features are way heavier than the data itself.)_ 
      
 + __Part 2 : Feature Extraction__
-    + Run this code :
-    
-```
-python main.py -v -fe -m -s
-```
+    + Run this code : `python main.py -v -fe -m -s`
     
         + `-fe` argument will run the feature extraction script
         + `-m` argument will run the model fitting script
