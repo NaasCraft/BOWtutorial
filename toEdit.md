@@ -23,7 +23,7 @@
     - [ ] Error handling
     - [ ] Variable/function renaming
     
-- [ ]Code structure
+- [ ] Code structure
     - [ ] Simplification with classes definition (esp. for data)
     - [ ] Split (feature extraction, model fitting and submit) part
     - [ ] Split `submission.run` into multiple functions
