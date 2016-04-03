@@ -39,13 +39,14 @@ Here's an example :
     
 + __Part 1 : Preprocessing__
     + Run :
-    ```
-    python main.py -v -p -pp
-    ```
     
-        + `-v` argument will make the program output messages in the console
-        + `-p` argument will force the pickling of pre-processed data
-        + `-pp` argument will run the pre-processing script
+```
+python main.py -v -p -pp
+```
+    
+        * `-v` argument will make the program output messages in the console
+        * `-p` argument will force the pickling of pre-processed data
+        * `-pp` argument will run the pre-processing script
         
     + You will be prompted something like this :
     ![Example console output 1](https://github.com/NaasCraft/BOWtutorial/blob/master/source/img/exampleCO_1.png)
@@ -57,9 +58,10 @@ Here's an example :
      
 + __Part 2 : Feature Extraction__
     + Run this code :
-    ```
-    python main.py -v -fe -m -s
-    ```
+    
+```
+python main.py -v -fe -m -s
+```
     
         + `-fe` argument will run the feature extraction script
         + `-m` argument will run the model fitting script
