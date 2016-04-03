@@ -19,8 +19,9 @@
 
 + __debug__( var, repr ) :
     + _does_ : Print out "debug repr" followed by (_var_) value
+    + _returns_ : _Nothing_
     + _imported in_ : `preprocess.py`, `sklmodels.py`, `submission.py`, `w2v.py`
-    + _calls_ : Nothing
+    + _calls_ : _Nothing_
     + _arguments_ :
         
 | type | name | description |
@@ -39,9 +40,10 @@
 #### Functions
 
 + __reSub__( text, lSubs ) :
-    + _does_ : 
-    + _called by_ : 
-    + _calls_ : 
+    + _does_ : Performs a "lSubs" list of regular expression substitutions in the "text" string parameter
+    + _returns_ : Treated "text" (as _string_)
+    + _called by_ : __reTreatment__
+    + _calls_ : __copy.copy__, __re.sub__
     + _arguments_ :
         
 | type | name | description |
@@ -50,9 +52,10 @@
 | _list_ of _list_ of _string_ | lSubs | List of Regex substitution pairs |
 
 + __reTreatment__( text, level=0 ) :
-    + _does_ : 
-    + _called by_ : 
-    + _calls_ : 
+    + _does_ : Performs a Regex treatment on "text" string as defined by "level" parameter (0 keeps _only alphabetica_l chars, 1 adds _numbers_ as "num", 2 adds _punctuation_ as "punct", 3 adds _emoticons_ as "emo")
+    + _returns_ : Treated text (as _string_)
+    + _called by_ : __fullPPtoW__
+    + _calls_ : __reSub__
     + _arguments_ :
         
 | type | name | description |
@@ -61,19 +64,21 @@
 | _int_ | level | Level of Regex treatment (0-3) |
 
 + __rmStopword__( words ) :
-    + _does_ : 
-    + _called by_ : 
-    + _calls_ : 
+    + _does_ : Removes stopwords from the given "words" list of tokens
+    + _returns_ : Treated list of words (as _list_)
+    + _called by_ : __fullPPtoW__
+    + _calls_ : __nltk.corpus.stopwords__
     + _arguments_ :
         
 | type | name | description |
 | --- | --- | --- |
 | _list_ of _string_ | words | List of tokens to be treated |
 
-+ __pStem__( words ) :
-    + _does_ :
-    + _called by_ :
-    + _calls_ :
++ __pStem__( words ) : Applies the Porter Stemming algorithm to the given list of tokens
+    + _does_ : Applies the Porter Stemming algorithm to the given "words" list of tokens
+    + _returns_ : Treated list of words (as _list_)
+    + _called by_ : __fullPPtoW__
+    + _calls_ : __nltk.stem.porter.PorterStemmer__
     + _arguments_ :
         
 | type | name | description |
@@ -81,9 +86,10 @@
 | _list_ of _string_ | words | List of tokens to be treated |
 
 + __fullPPtoW__( review, re_level, sw_drop, stem, join_res=True ) :
-    + _does_ :
-    + _called by_ :
-    + _calls_ :
+    + _does_ : Computes a full "review" string pre-processing, according to ("re_level", "sw_drop", "stem") parameters
+    + _returns_ : Treated "review" (as _list_ or _string_ depending on "join_res")
+    + _called by_ : __fullPPtoS__, __run__, __submission.run__
+    + _calls_ : __reTreatment__, __rmStopWords__, __pStem__, __bs4.BeautifulSoup__
     + _arguments_ :
         
 | type | name | description |
@@ -95,9 +101,10 @@
 | _boolean_ | join_res | Should return result as string (else as list of words) |
 
 + __fullPPtoS__( review, re_level, sw_drop, stem, tk=tokenizer_ ) :
-    + _does_ :
-    + _called by_ :
-    + _calls_ :
+    + _does_ : Computes a full "review" string pre-processing into sentences split by "tk", according to ("re_level", "sw_drop", "stem") parameters
+    + _returns_ : Treated review into list of sentences (as _list_)
+    + _called by_ : __run__
+    + _calls_ : __fullPPtoW__
     + _arguments_ :
         
 | type | name | description |
@@ -109,9 +116,12 @@
 | _Tokenizer_ (from __nltk__) | tk | Tokenizer to split into sentences |
 
 + __run__( data, verbose=False, re_level=0, sw_drop=True, stem=False, asW2V=False ) :
-    + _does_ :
-    + _called by_ :
-    + _calls_ :
+    + _does_ : Full "data" pre-processing according to given parameters
+    + _returns_ : (__2__ values)
+        + if "asW2V" : Treated data as sentences (as _list_), ... as words (as _list_)
+        + else : Treated data as words (as _list_), empty list
+    + _called by_ : `python main.py -pp`, __submission.run__
+    + _calls_ : __time.time__, __fullPPtoS__, __fullPPtoW__
     + _arguments_ :
         
 | type | name | description |
@@ -136,7 +146,8 @@
 #### Functions
 
 + __dataScaler__( train ) :
-    + _does_ :
+    + _does_ : 
+    + _returns_ :  (as __)
     + _called by_ :
     + _calls_ :
     + _arguments_ :
@@ -146,7 +157,8 @@
 | _list_ | train | List of train features to fit the scaler |
 
 + __buildRF__( features, label, n_est=100, verbose=False ) :
-    + _does_ :
+    + _does_ : 
+    + _returns_ :  (as __)
     + _called by_ :
     + _calls_ :
     + _arguments_ :
@@ -159,7 +171,8 @@
 | _boolean_ | verbose | Controls console outputs |
 
 + __buildSVM__( features, label, verbose=False ) :
-    + _does_ :
+    + _does_ : 
+    + _returns_ :  (as __)
     + _called by_ :
     + _calls_ :
     + _arguments_ :
@@ -172,6 +185,7 @@
 
 + __buildKNN__( features, label, verbose=False ) :
     + _does_ :
+    + _returns_ :  (as __)
     + _called by_ :
     + _calls_ :
     + _arguments_ :
@@ -183,7 +197,8 @@
 | _boolean_ | verbose | Controls console outputs |
 
 + __buildModel__( features, label, mode="rf", verbose=False ) :
-    + _does_ :
+    + _does_ : 
+    + _returns_ :  (as __)
     + _called by_ :
     + _calls_ :
     + _arguments_ :
@@ -197,6 +212,7 @@
 
 + __getBoWf__( data=[], unpickle=False, verbose=False, m_f=5000, default=False, vect=False ) :
     + _does_ :
+    + _returns_ :  (as __)
     + _called by_ :
     + _calls_ :
     + _arguments_ :
@@ -223,6 +239,7 @@
 
 + __run__( model, modelID, verb=False, re_level=0, sw_drop=True, stem=False, max_f=5000, vect=None, mode=False, wordModel=False, scale=False, dScaler=None ) :
     + _does_ :
+    + _returns_ :  (as __)
     + _called by_ :
     + _calls_ :
     + _arguments_ :
@@ -256,6 +273,7 @@
 
 + __makeFeatureVec__( words, model, num_features ) :
     + _does_ :
+    + _returns_ :  (as __)
     + _called by_ :
     + _calls_ :
     + _arguments_ :
@@ -268,6 +286,7 @@
 
 + __showClusters__ ( map, n ) :
     + _does_ :
+    + _returns_ :  (as __)
     + _called by_ :
     + _calls_ :
     + _arguments_ :
@@ -279,6 +298,7 @@
 
 + __kMeansFit__ ( data, num_clusters ) :
     + _does_ :
+    + _returns_ :  (as __)
     + _called by_ :
     + _calls_ :
     + _arguments_ :
@@ -290,6 +310,7 @@
 
 + __createBagOfCentroids__( wordlist, word_centroid_map ) :
     + _does_ :
+    + _returns_ :  (as __)
     + _called by_ :
     + _calls_ :
     + _arguments_ :
@@ -301,6 +322,7 @@
 
 + __loopFV__( reviews, model, mode="avg", dump=False ) :
     + _does_ :
+    + _returns_ :  (as __)
     + _called by_ :
     + _calls_ :
     + _arguments_ :
@@ -314,6 +336,7 @@
 
 + __load__( model_name, rd=True ) :
     + _does_ :
+    + _returns_ :  (as __)
     + _called by_ :
     + _calls_ :
     + _arguments_ :
@@ -325,6 +348,7 @@
 
 + __notMatch__( model, words, verbose ) :
     + _does_ :
+    + _returns_ :  (as __)
     + _called by_ :
     + _calls_ :
     + _arguments_ :
@@ -337,6 +361,7 @@
 
 + __modelTesting__( model ) :
     + _does_ :
+    + _returns_ :  (as __)
     + _called by_ :
     + _calls_ :
     + _arguments_ :
@@ -347,6 +372,7 @@
 
 + run( sentences, save=False, default=False, verbose=False, ready=True, lf=False, loadname="" ) :
     + _does_ :
+    + _returns_ :  (as __)
     + _called by_ :
     + _calls_ :
     + _arguments_ :
