@@ -82,3 +82,5 @@ Here's an example :
 - Phrases extraction  
 - Hierarchical topic detection
 - Other clustering algorithms
+- Parameters selection for models through _Cross validation_
+- Read methods used for Leaderboard n°4 [vinhkhuc/kaggle-sentiment-popcorn](https://github.com/vinhkhuc/kaggle-sentiment-popcorn)

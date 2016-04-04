@@ -15,6 +15,10 @@
 - [x] [Part 3](https://www.kaggle.com/c/word2vec-nlp-tutorial/details/part-3-more-fun-with-word-vectors) : More Fun With Word Vectors
     - [ ] _[extension]_ : Hierarchical topic detection
     - [ ] _[extension]_ : Other clustering algorithms
+    
+- [ ] Improving results
+    - [ ] Parameters selection for models through _Cross validation_
+    - [ ] Read methods used for Leaderboard n°4 [vinhkhuc/kaggle-sentiment-popcorn](https://github.com/vinhkhuc/kaggle-sentiment-popcorn)
   
 ### Code modifications
 
