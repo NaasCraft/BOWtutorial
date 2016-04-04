@@ -10,7 +10,9 @@
 - [x] [Part 2](https://www.kaggle.com/c/word2vec-nlp-tutorial/details/part-2-word-vectors) : Word Vectors
     - [ ] _[extension]_ : Compare with [__GloVe__](http://nlp.stanford.edu/projects/glove/)
     - [ ] _[extension]_ : Try model learning with external corpus (e.g. [Latest Wikipedia dump](http://dumps.wikimedia.org/enwiki/latest/enwiki-latest-pages-articles.xml.bz2))
-    - [ ] _[extension]_ : Phrases extraction
+    - [ ] _[extension]_ : Phrases extraction (with POS tagging ?)
+    - [ ] _[extension]_ : Sentiment lexicon (such as the [General Inquirer](http://www.wjh.harvard.edu/~inquirer/))
+    - [ ] _[extension]_ : [Turney Algorithm](http://www.aclweb.org/anthology/P02-1053.pdf)
     
 - [x] [Part 3](https://www.kaggle.com/c/word2vec-nlp-tutorial/details/part-3-more-fun-with-word-vectors) : More Fun With Word Vectors
     - [ ] _[extension]_ : Hierarchical topic detection

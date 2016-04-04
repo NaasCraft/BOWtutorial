@@ -79,7 +79,9 @@ Here's an example :
 
 - Compare with [__GloVe__](http://nlp.stanford.edu/projects/glove/)
 - Try model learning with external corpus (e.g. [Latest Wikipedia dump](http://dumps.wikimedia.org/enwiki/latest/enwiki-latest-pages-articles.xml.bz2))
-- Phrases extraction  
+- Phrases extraction (with POS tagging ?) 
+- Sentiment lexicon (such as the [General Inquirer](http://www.wjh.harvard.edu/~inquirer/))
+- [Turney Algorithm](http://www.aclweb.org/anthology/P02-1053.pdf)
 - Hierarchical topic detection
 - Other clustering algorithms
 - Parameters selection for models through _Cross validation_
