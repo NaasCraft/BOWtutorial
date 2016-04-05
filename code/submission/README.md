@@ -74,4 +74,4 @@ _Preprocessing mode : Regex0, noSW, noStem_
 |  | RandomForest | 5-NN | SVM | SoftVoting |
 | :---: | ---: | ---: | ---: | ---: |
 | Bag of Words 2000 | 0.83848 | 0.61544 | 0.85796 | 0.86184 |
-| Bag of Words 5000 |  |  |  |  |
+| Bag of Words 5000 | 0.84628 | 0.61204 | 0.84668 |  0.85612 |
