@@ -208,16 +208,16 @@ def buildModel( features, label, mode="rf", verbose=False ):
 		params = [n_est, n_neigh, kern]
 	
 	if mode == "rf":
-		return buildRF( features, label, n_est, verbose )
+		return buildRF( features, label, params[0], verbose )
 		
 	#elif mode == "mlp":
 	#	return buildMLP( features, label, verbose )
 		
 	elif mode == "svm":
-		return buildSVM( features, label, n_neigh, verbose )
+		return buildSVM( features, label, params[2], verbose )
 		
 	elif mode == "knn":
-		return buildKNN( features, label, kernel, verbose )
+		return buildKNN( features, label, params[1], verbose )
 		
 	elif mode == "agg":
 		return buildVoting( features, label, params, verbose )
