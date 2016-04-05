@@ -170,7 +170,7 @@ if __name__ == "__main__":
 				else:
 					scaler = None
 					
-				in_modelMode = raw_input( "Enter classifier to use (rf, svm, knn) : " )
+				in_modelMode = raw_input( "Enter classifier to use (rf, svm, knn, agg) : " )
 				modelFit = sklmodels.buildModel( features=trainFeatures, label=train["sentiment"], mode=in_modelMode, verbose=_verb)
 				
 				''' Same size issues
