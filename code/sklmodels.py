@@ -90,10 +90,10 @@ def buildMLP( features, label, verbose=False ):
 
 
 
-def buildSVM( features, label, verbose=False ):
+def buildSVM( features, label, kernel="rbf", verbose=False ):
 	''' git description
 + __buildSVM__( features, label, verbose=False ) :
-    + _does_ : Fits a SVM classifier with gaussian kernel, on ("features", "label") data
+    + _does_ : Fits a SVM classifier with "kernel" kernel, on ("features", "label") data
     + _returns_ : Fitted classifier (as _SVC_)
     + _called by_ : __buildModel__
     + _calls_ : __sklearn.svm.SVC__
@@ -103,24 +103,24 @@ def buildSVM( features, label, verbose=False ):
 | --- | --- | --- |
 | _list_ | features | List of train features to fit the model |
 | _list_ of _int_ | label | List of associated labels |
+| _string_ | kernel | Kernel type ("linear", "poly", "rbf" or "sigmoid") |
 | _boolean_ | verbose | Controls console outputs |
 	'''
 	
 	from sklearn.svm import SVC
 	
-	if verbose: print( "Training the SVM model with gaussian kernel...\n" )
+	if verbose: print( "Training the SVM model with '" + str(kernel) + "' kernel...\n" )
 	t = time()
-	svc = SVC(kernel='rbf', gamma='auto') 
+	svc = SVC(kernel=kernel, gamma='auto') 
 	svc = svc.fit( features, label )
 	
 	if verbose: print( "Completed in " + str( time()-t ) + " seconds.\n" )
 	return svc
 
-def buildKNN( features, label, verbose=False ):
+def buildKNN( features, label, n_neighbors=3, verbose=False ):
 	''' git description
-+ __buildKNN__( features, label, verbose=False ) :
-    + _does_ : Fits a k-NN classifier with k=3, on ("features", "label") data
-        + _[toEdit] add k as a parameter_
++ __buildKNN__( features, label, n_neighbors=3, verbose=False ) :
+    + _does_ : Fits a k-NN classifier with k = "n_neighbors", on ("features", "label") data
     + _returns_ : Fitted classifier (as _KNeighborsClassifier_)
     + _called by_ : __buildModel__
     + _calls_ : __sklearn.neighbors.KNeighborsClassifier__
@@ -130,12 +130,13 @@ def buildKNN( features, label, verbose=False ):
 | --- | --- | --- |
 | _list_ | features | List of train features to fit the model |
 | _list_ of _int_ | label | List of associated labels |
+| _int_ | n_neighbors | Number of neighbors in the vote count (_k_) |
 | _boolean_ | verbose | Controls console outputs |
 	'''
 	
 	from sklearn.neighbors import KNeighborsClassifier
 	
-	if verbose: print( "Training the K-NN model with k=3...\n" )
+	if verbose: print( "Training the K-NN model with k=" + str(n_neighbors) + "...\n" )
 	t = time()
 	clf = KNeighborsClassifier(n_neighbors=3) 
 	clf = clf.fit( features, label )
@@ -143,13 +144,50 @@ def buildKNN( features, label, verbose=False ):
 	if verbose: print( "Completed in " + str( time()-t ) + " seconds.\n" )
 	return clf
 
+def buildVoting( features, label, params, verbose=False ):
+	''' git description
++ __buildVoting__( features, label, params, verbose=False ) :
+    + _does_ : Fits a voting classifier aggregating a RF a SVM and a KNN classifiers, on ("features", "label") data
+    + _returns_ : Fitted model (as _?_, has to be a _sklearn_ classifier though)
+    + _called by_ : __buildModel__
+    + _calls_ : __sklearn.ensemble.RandomForestClassifier__, __sklearn.svm.SVC__, __sklearn.neighbors.KNeighborsClassifier__, __sklearn.ensemble.VotingClassifier__
+    + _arguments_ :
+        
+| type | name | description |
+| --- | --- | --- |
+| _list_ | features | List of train features to fit the model |
+| _list_ of _int_ | label | List of associated labels |
+| _list_ | params | List of model parameters [n_estimators, n_neighors, kernel] |
+| _boolean_ | verbose | Controls console outputs |
+	'''
+	
+	from sklearn.ensemble import RandomForestClassifier, VotingClassifier
+	from sklearn.svm import SVC
+	from sklearn.neighbors import KNeighborsClassifier
+	
+	clf1 = RandomForestClassifier( n_estimators = params[0] )
+	clf2 = KNeighborsClassifier( n_neighbors = params[1] )
+	clf3 = SVC( kernel = params[2], probability = True )
+	
+	t= time()
+	if verbose: print( "Training a voting classifier from following models : \n" + \
+				"  - Random Forest (" + str(params[0]) +" estimators) - weight = 2 \n" + \
+				"  - " + str(params[1]) + "-Nearest Neighbors - weight = 1 \n" + \
+				"  - SVM ('" + str(params[2]) + "' kernel) - weight = 2 \n\n" + \
+				"Please wait...\n" )
+	agg_clf = VotingClassifier( estimators=[ ('rf', clf1), ('knn', clf2), ('svm', clf3) ], voting='soft', weights=[2,1,2] )
+	agg_clf.fit( features, label )
+	
+	if verbose: print( "Completed in " + str( time()-t ) + " seconds.\n" )
+	return agg_clf
+
 def buildModel( features, label, mode="rf", verbose=False ):
 	''' git description
 + __buildModel__( features, label, mode="rf", verbose=False ) :
-    + _does_ : Fits a classifier given by "mode", on ("features", "label") data
+    + _does_ : Fits a classifier given by "mode" (or more if mode="agg"), on ("features", "label") data
     + _returns_ : Fitted model (as _?_, has to be a _sklearn_ classifier though)
-    + _called by_ : 
-    + _calls_ :
+    + _called by_ : `python main.py -fe -m`
+    + _calls_ : __buildRF__, __buildSVM__, __buildKNN__, __buildVoting__
     + _arguments_ :
         
 | type | name | description |
@@ -160,18 +198,30 @@ def buildModel( features, label, mode="rf", verbose=False ):
 | _boolean_ | verbose | Controls console outputs |
 	'''
 	
+	df = raw_input( "Default parameters for models ? (Y/N) :" ) == "Y"
+	if df:
+		params = [100, 5, "rbf"]
+	else:
+		n_est = int( raw_input( "Number of estimators for RF : ") )
+		n_neigh = int( raw_input( "Number of neighbors votes for k-NN : ") )
+		kern = raw_input( "Kernel type for SVM (rbf, poly, linear, sigmoid) : ")
+		params = [n_est, n_neigh, kern]
+	
 	if mode == "rf":
-		in_n_est = int( raw_input( "Enter number of estimators for the Random Forest classifier : " ) )
-		return buildRF( features, label, in_n_est, verbose )
+		return buildRF( features, label, n_est, verbose )
 		
 	#elif mode == "mlp":
 	#	return buildMLP( features, label, verbose )
 		
 	elif mode == "svm":
-		return buildSVM( features, label, verbose )
+		return buildSVM( features, label, n_neigh, verbose )
 		
 	elif mode == "knn":
-		return buildKNN( features, label, verbose )
+		return buildKNN( features, label, kernel, verbose )
+		
+	elif mode == "agg":
+		return buildVoting( features, label, params, verbose )
+
 
 def getBoWf( data=[], unpickle=False, verbose=False, m_f=5000, default=False, vect=False ):
 	''' git description

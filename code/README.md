@@ -143,7 +143,7 @@
 + __-d__ : "Default", runs with default parameters.
 
 
-#### Functions (6)
+#### Functions (7)
 
 + __dataScaler__( train ) :
     + _does_ : Fits a standard feature scaler on "train" data
@@ -171,7 +171,7 @@
 | _boolean_ | verbose | Controls console outputs |
 
 + __buildSVM__( features, label, verbose=False ) :
-    + _does_ : Fits a SVM classifier with gaussian kernel, on ("features", "label") data
+    + _does_ : Fits a SVM classifier with "kernel" kernel, on ("features", "label") data
     + _returns_ : Fitted classifier (as _SVC_)
     + _called by_ : __buildModel__
     + _calls_ : __sklearn.svm.SVC__
@@ -181,11 +181,11 @@
 | --- | --- | --- |
 | _list_ | features | List of train features to fit the model |
 | _list_ of _int_ | label | List of associated labels |
+| _string_ | kernel | Kernel type ("linear", "poly", "rbf" or "sigmoid") |
 | _boolean_ | verbose | Controls console outputs |
 
-+ __buildKNN__( features, label, verbose=False ) :
-    + _does_ : Fits a k-NN classifier with k=3, on ("features", "label") data
-        + _[toEdit] add k as a parameter_
++ __buildKNN__( features, label, n_neighbors=3, verbose=False ) :
+    + _does_ : Fits a k-NN classifier with k = "n_neighbors", on ("features", "label") data
     + _returns_ : Fitted classifier (as _KNeighborsClassifier_)
     + _called by_ : __buildModel__
     + _calls_ : __sklearn.neighbors.KNeighborsClassifier__
@@ -195,13 +195,28 @@
 | --- | --- | --- |
 | _list_ | features | List of train features to fit the model |
 | _list_ of _int_ | label | List of associated labels |
+| _int_ | n_neighbors | Number of neighbors in the vote count (_k_) |
+| _boolean_ | verbose | Controls console outputs |
+
++ __buildVoting__( features, label, params, verbose=False ) :
+    + _does_ : Fits a voting classifier aggregating a RF a SVM and a KNN classifiers, on ("features", "label") data
+    + _returns_ : Fitted model (as _?_, has to be a _sklearn_ classifier though)
+    + _called by_ : __buildModel__
+    + _calls_ : __sklearn.ensemble.RandomForestClassifier__, __sklearn.svm.SVC__, __sklearn.neighbors.KNeighborsClassifier__, __sklearn.ensemble.VotingClassifier__
+    + _arguments_ :
+        
+| type | name | description |
+| --- | --- | --- |
+| _list_ | features | List of train features to fit the model |
+| _list_ of _int_ | label | List of associated labels |
+| _list_ | params | List of model parameters [n_estimators, n_neighors, kernel] |
 | _boolean_ | verbose | Controls console outputs |
 
 + __buildModel__( features, label, mode="rf", verbose=False ) :
-    + _does_ : Fits a classifier given by "mode", on ("features", "label") data
+    + _does_ : Fits a classifier given by "mode" (or more if mode="agg"), on ("features", "label") data
     + _returns_ : Fitted model (as _?_, has to be a _sklearn_ classifier though)
-    + _called by_ : 
-    + _calls_ :
+    + _called by_ : `python main.py -fe -m`
+    + _calls_ : __buildRF__, __buildSVM__, __buildKNN__, __buildVoting__
     + _arguments_ :
         
 | type | name | description |
