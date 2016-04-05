@@ -1,6 +1,6 @@
 # coding=latin-1
 #
-# Last update : 02/04/2016
+# Last update : 05/04/2016
 # Author : Naascraft
 # Description : Kaggle tutorial on NLP with Word2Vec [WORD2VEC]
 
