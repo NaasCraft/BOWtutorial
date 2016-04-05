@@ -60,3 +60,18 @@ For this tutorial, I have implemented :
 |  | Bag of Words | Averaged Word Vectors | Bag of Centroids |
 | :---: | ---: | ---: | ---: |
 | Regex1, noSW, noStem | 0.84544 |  |  |
+
+### Aggregating models - an example
+
+Soft Voting classifier combining :
+
++ (weight = 2) RandomForest with 100 estimators
++ (weight = 1) 5-Nearest Neighbors
++ (weight = 2) Gaussian kernel SVM
+
+_Preprocessing mode : Regex0, noSW, noStem_
+
+|  | RandomForest | 5-NN | SVM | SoftVoting |
+| :---: | ---: | ---: | ---: | ---: |
+| Bag of Words 2000 | 0.83848 | 0.61544 | 0.85796 | 0.86184 |
+| Bag of Words 5000 |  |  |  |  |
